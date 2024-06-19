@@ -184,6 +184,7 @@ class LoRa:
         self._set_spreading_factor("5")
 
         # LoRaWAN868
+        #TODO: Wrong freq?
         self._set_rx_window("869525000")
 
         self._set_freq_mask("0001")
@@ -226,7 +227,7 @@ class LoRa:
 
         response = self.receive_msg()
 
-        if (response != ""):
+        if response != "":
             print("Received: ", end=": ")
             print(response)
 

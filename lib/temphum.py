@@ -13,7 +13,7 @@ class TempHum:
         return temp, hum
     
     
-def get_mean_values(sensors: list) -> tuple:
+def get_mean_values(sensors: list) -> tuple[int, int]:
     def calculate_mean(arr: list):
         return sum(arr) / len(arr)
 
@@ -22,8 +22,9 @@ def get_mean_values(sensors: list) -> tuple:
 
     for sensor in sensors:
         temp, hum = sensor.read_sensor()
-        if 0 < temp <= 50 and 0 < hum <= 100:
+        if 0 <= temp <= 50:
             valid_temps.append(temp)
+        if 0 <= hum <= 100:
             valid_hums.append(hum)
 
     temp, hum = calculate_mean(valid_temps), calculate_mean(valid_hums)
