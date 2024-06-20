@@ -40,7 +40,7 @@ class LoRa:
         else:
             return False
 
-    def check_join_status(self):
+    def ng_check_join_status(self):
         restr = ""
         self._write_cmd("AT+CSTATUS?\r\n")
         restr = self._get_response()
@@ -51,6 +51,15 @@ class LoRa:
                 return False
         else:
             return False
+
+    def check_join_status(self):
+        restr = ""
+        self._write_cmd("AT+CSTATUS?\r\n")
+        restr = self._get_response()
+        if "+CSTATUS:" in restr and "08" in restr:
+            return True
+
+        return False
 
     def _wait_msg(self, timeout):
         restr = ""
@@ -184,15 +193,14 @@ class LoRa:
         self._set_spreading_factor("5")
 
         # LoRaWAN868
-        #TODO: Wrong freq?
+        # TODO: Wrong freq?
         self._set_rx_window("869525000")
 
         self._set_freq_mask("0001")
 
+    def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
 
-    def setup_lora(self, dev_eui:str, app_eui:str, app_key:str):
-
-        #lora.configure(DEV_EUI, APP_EUI, APP_KEY)
+        # lora.configure(DEV_EUI, APP_EUI, APP_KEY)
         self.configure(dev_eui, app_eui, app_key)
 
         self.start_join()
@@ -202,22 +210,21 @@ class LoRa:
             time.sleep(1)
         print("Join success!")
 
-
-    def send_over_lora(self,temp:int, hum:int):
+    def send_over_lora(self, temp: int, hum: int):
         # Reading from sensor should be done here
 
         # Example temperature (in Celsius) and humidity (%) values with a negative temperature
-        #temperature, humidity = -14.2, 42.5
+        # temperature, humidity = -14.2, 42.5
 
         # Convert the float values to integers by multiplying them by a factor (example: 10)
-        #temp_int = int(temperature * 10)
-        #humidity_int = int(humidity * 10)
+        # temp_int = int(temperature * 10)
+        # humidity_int = int(humidity * 10)
 
         # https://docs.micropython.org/en/latest/library/struct.html
         # >: Indicates big-endian byte order. Big-endian means the most significant byte is stored first.
         # h: Represents a short integer (2 bytes).
         # H: Represents an unsigned short integer (2 bytes).
-        #payload = struct.pack(">hH", temp_int, humidity_int)
+        # payload = struct.pack(">hH", temp_int, humidity_int)
         payload = struct.pack(">hH", temp, hum)
 
         payload = payload.hex()
@@ -230,4 +237,3 @@ class LoRa:
         if response != "":
             print("Received: ", end=": ")
             print(response)
-

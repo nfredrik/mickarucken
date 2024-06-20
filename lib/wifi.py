@@ -5,7 +5,7 @@ from time import sleep, time
 class Wifi:
     TIMEOUT = 15
     
-    def debug_print(self,text:str):
+    def debug_print(self,text:str,end:str=''):
         if self.debug:
             print(text)
     
