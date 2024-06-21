@@ -3,7 +3,7 @@
 # Overview
 
 The project introduces a solution how read humidity and temperature
-using a a DHT11 sensors, Raspberry Pi Pico W and for foward it  with help of WIFI or LoRA 
+using a a DHT11 sensors, Raspberry Pi Pico W and for foward it with help of WIFI or LoRA to 
 visulalize it using DataCake. 
 
 The project introduces a solution to read humidity and temperature using a DHT11 sensor, Raspberry Pi Pico W, and
@@ -35,24 +35,20 @@ a LoRa gateway in the garden community.
 
 
 
-# Materials
+# List of Materials
 
-List of material
-
-
-| Enity | price |
+| Enity | price SEK including VAT|
 | ----------- | ----------- |
-| Bread board | 36 SEK            |
-| Pico RP2 W | 36  SEK          |
-| DHT11 | 36  SEK          |
-| DHT11 | 36  SEK          |
-| LoRa modem | 36  SEK          |
-| wires | 5  SEK          |
+| Solderless Breadboard 840 tie-points | 69  |
+|USB cable A-male - microB-male| 39 | 
+| Raspberry Pi Pico WH | 109  |
+| 2 Digital temperature and humidity sensor DHT11 | 2* 49 *           |
+| M5Stack LoRa module 868MHz | 330     |
+| Jumper wires 40-pin 30cm male/male | 49           |
+| Labbsladd Grove - 0.64mm hylsor 4-pol 200mm| 14.5 |
 
+All equipment purchased from Electrokit
 
--What the different things (sensors, wires, controllers) do - short specifications
--Where you bought them and how much they cost
--Example:
 
 In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1
 
@@ -71,37 +67,14 @@ Fig 2.
 Fig 2.
 
 
-All devices are purchased from Electrokit
+LoRaWAN UNIT 470MHz (ASR6501)
 
-# Example !
+ ![T](./images/lora_modem.webp)
 
-Make a table?
-raspberry pi pico W
-The controller
-Two PIR motion sensors
-The sensors
-LED lamp (Optional)
-Used during setup as a visual rep. of the pir sensors.
-Two 330ohm resistors (*For LED, also optional)
-Current limiting as to protect the LED
-Wire
-Connecting the components
-47uf Capacitor
-Optional, helps stabalize the power supply to the sensors.
-Bredboard (optional, you can solder if you like)
 
 
 
 # Computer setup
-
-++ Chosen IDE
-++ How the code is uploaded
-++ Steps that you needed to do for your computer. Installation of Node.js, extra drivers, etc.
-Putting everything together
-How is all the electronics connected? Describe all the wiring, good if you can show a circuit diagram. 
-Be specific on how to connect everything, and what to think of in terms of resistors, current and voltage.
-Is this only for a development setup or could it be used in production?
-
 
 How is the device programmed. Which IDE are you using. Describe all steps from flashing the firmware,
 installing plugins in your favorite editor. How flashing is done on MicroPython. The aim is that a
@@ -134,10 +107,6 @@ case. It's a devicefile cu.usbmodem14201.
 
 
 
-
-
-
-
 # Circuit diagram (can be hand drawn)
 -Electrical calculations
 
@@ -164,36 +133,16 @@ Is your platform based on a local installation or a cloud? Do you plan to use a 
 a free? Describe the different alternatives on going forward if you want to scale your idea.
 
 I choosen DataCake since it's easy and not to much work to get it going. With the measurement I 
-have I think it's a goof fit.
+have I think it's a good fit.
 
 
 
-Describe platform in terms of functionality
-*Explain and elaborate what made you choose this platform
+
 # The code
-Import core functions of your code here, and don't forget to explain what you have done! Do not put
-too much code here, focus on the core functionalities. Have you done a specific function that does 
-a calculation, or are you using clever function for sending data on two networks? Or, are you checking
-if the value is reasonable etc. Explain what you have done, including the setup of the network, wireless, 
-libraries and all that is needed to understand.
-
 
 # Explain your code!
 Transmitting the data / connectivity
 How is the data transmitted to the internet or local server? Describe the package format. All the different steps that are needed in getting the data to your end-point. Explain both the code and choice of wireless protocols.
-
-How often is the data sent?
-Which wireless protocols did you use (WiFi, LoRa, etc …)?
-Which transport protocols were used (MQTT, webhook, etc …)
-*Elaborate on the design choices regarding data transmission and wireless protocols. That is how your choices affect the device range and battery consumption.
-Presenting the data
-Describe the presentation part. How is the dashboard built? How long is the data preserved in the database?
-
-Provide visual examples on how the dashboard looks. Pictures needed.
-How often is data saved in the database.
-*Explain your choice of database.
-*Automation/triggers of the data.
-
 
 The file structure of the project it's simple. There is a ***main** function and number of files that
 provides functionality to support the ***main** function.
@@ -207,8 +156,8 @@ provides functionality to support the ***main** function.
 | Post data to **DataCake** | wifi.py |
 | credentials for WIFI and DataCake | datacake_keys.py, keys |
 
-````
 file structure
+````commandline=
 .
 ├── LICENSE
 ├── README.md
@@ -227,7 +176,7 @@ The code have the following structure:
  - Runtime phase where sensors are read  and posted to DataCake or some similar system. The intension is to have as much details to the the main function
 as possible, **main** should deal more on behaviour.
 
-```python
+```python=
 import sys
 from time import sleep
 
@@ -291,7 +240,7 @@ if __name__ == "__main__":
 ```
 Layout  of keys.py
 
-```python
+```python=
 WIFI_SSID = 'ollebollen37'
 WIFI_PASS = 'chockladsanke456'
 
@@ -302,15 +251,19 @@ APP_KEY = "42ED841CCD0A92561EA9ED33DF9CABBA"
 
 Layout  of datacake_keys.py
 
-```python
+```python=
 DATACAKE_URL = "https://api.datacake.co/integrations/api/78d4d384-d041-5bdb-af47-eb942ee19642/"
 DATACAKE_SERIAL = "17ab0111-abba-4242-7117-2ea534b5c42e"
 
 ```
 
+The rest of the source code is provided in in this repo. Please check these of reading of temperature and humidity is 
+done and setup of Wifi and LoRa and code for forwarding data to the cloud.
+
 
 # Finalizing the design
 Show the final results of your project. Give your final thoughts on how you think the project went. What could have been done in an other way, or even better? Pictures are nice!
+
 
 Show final results of the project
 Pictures
@@ -318,8 +271,14 @@ Pictures
 Last changed by
 T
 
+ ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
+
+ ![Tux, the Linux mascot](./images/skiss.jpeg)
 
 
+
+
+# Transmitting the data / connectivity
 
 
 # Wifi track
@@ -334,7 +293,17 @@ modem have connected to the network. Often I got halfway, saying: "There is data
 is "03" but the status expects "There is data sent and success, there is download too.". This did never happened.
 I enabled loggning the modem, and suddenly it started to work....
 
-```python
+
+Unit LoRaWAN868 is a LoRaWAN communication module suitable for 868MHz frequency launched by M5Stack. 
+The module adopts the ASR6501 scheme, which supports long-distance communication and has both ultra-low power
+consumption and high sensitivity. The module integrates the LoRaWAN protocol stack and adopts a serial communication
+interface (using the AT command set for control). When used, it can be used as a collection node to access a large 
+number of gateways for data collection and management. This module is suitable for long-distance low-power IoT
+communication applications, such as deployment of environmental monitoring nodes.
+
+ ![Tux, the Linux mascot](./images/lora_overview.png)
+
+```python=
 def check_join_status(self):
         restr = ""
         self._write_cmd("AT+CSTATUS?\r\n")
