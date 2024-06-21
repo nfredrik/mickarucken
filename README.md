@@ -152,9 +152,12 @@ provides functionality to support the ***main** function.
 | Main program, endless loop | main.py |
 | Read temperature and humidity | temphum.py |
 | Post data to DataCake | http_requests.py |
-| Connect to a WIFI network. Source code snatched and rewritten. | wifi.py |
-| Connect to a LoRa network. Source code copied and refactored to suit my means. | lora.py |
+| Connect to a WIFI network. source code copied, se below | wifi.py |
+| Connect to a LoRa network. source code copied, se below | lora.py |
 | Credentials for WIFI and DataCake | datacake_keys.py, keys |
+
+Source code for WIFI and LoRa has been copied from https://github.com/iot-lnu/pico-w and refactored
+
 
 file structure
 ````commandline=

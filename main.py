@@ -22,8 +22,9 @@ def debug_print(text: str, debug=True):
 
 
 def main():
-
-    # Setup of sensors and connections
+    """
+    Setup of sensors and connections
+    """
     sensors = [TempHum(gpio_pin=GPIO_26),
                TempHum(gpio_pin=GPIO_27)
                ]
@@ -34,11 +35,13 @@ def main():
     except TimeoutError as err:
         print(f"{err}")
 
-    #lora = LoRa()
-    #lora.setup_lora(dev_eui=DEV_EUI, app_eui=APP_EUI, app_key=APP_KEY)
+    lora = LoRa()
+    lora.setup_lora(dev_eui=DEV_EUI, app_eui=APP_EUI, app_key=APP_KEY)
 
 
-    # Eternal loop, if not interrupted,  of reading sensors and forward data to the cloud
+    """
+    Eternal loop, if not interrupted,  of reading sensors and forward data to the cloud
+    """
     while True:
         try:
             temp, hum = get_mean_values(sensors)
