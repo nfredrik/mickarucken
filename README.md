@@ -176,6 +176,40 @@ The code have the following structure:
  - Runtime phase where sensors are read  and posted to DataCake or some similar system. The intension is to have as much details to the the main function
 as possible, **main** should deal more on behaviour.
 
+
+```python=
+class TempHum:
+    def __init__(self, gpio_pin: int) -> None:
+        self.sensor = dht.DHT11(Pin(gpio_pin))
+
+    # The DHT11 can be called no more than once per second and the DHT22 once every two
+    # seconds for most accurate results. Sensor accuracy will degrade over time. Each sensor supports a different operating range. Refer to the product datasheets for specifics.
+
+    def read_sensor(self) -> tuple[int, int]:
+        try:
+            self.sensor.measure()
+            temp = self.sensor.temperature()
+            hum = self.sensor.humidity()
+        except Exception as err:
+            raise TempHumError(f'Error, failed to read sensors! {err}')
+
+        return temp, hum
+
+```
+
+```python=
+def post_values(temp: int, hum: int) -> None:
+    payload = {
+        "serial": DATACAKE_SERIAL,
+        "temperature": temp,
+        "humidity": hum}
+    json_payload = json.dumps(payload)
+
+    response = urequests.post(DATACAKE_URL, data=json_payload)
+    if response.status_code != HTTPStatus.OK:
+        raise DataCakeError(f"Error, failed to post data! {response.status_code}")
+
+```
 ```python=
 import sys
 from time import sleep
@@ -238,24 +272,7 @@ if __name__ == "__main__":
     sys.exit(main())
 
 ```
-Layout  of keys.py
 
-```python=
-WIFI_SSID = 'ollebollen37'
-WIFI_PASS = 'chockladsanke456'
-
-APP_EUI = "F8C83B1925EEDD37"
-DEV_EUI = "F8C83B1925EEDD37"
-APP_KEY = "42ED841CCD0A92561EA9ED33DF9CABBA"
-```
-
-Layout  of datacake_keys.py
-
-```python=
-DATACAKE_URL = "https://api.datacake.co/integrations/api/78d4d384-d041-5bdb-af47-eb942ee19642/"
-DATACAKE_SERIAL = "17ab0111-abba-4242-7117-2ea534b5c42e"
-
-```
 
 The rest of the source code is provided in in this repo. Please check these of reading of temperature and humidity is 
 done and setup of Wifi and LoRa and code for forwarding data to the cloud.

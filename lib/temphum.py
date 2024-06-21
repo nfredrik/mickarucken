@@ -8,6 +8,9 @@ class TempHum:
     def __init__(self, gpio_pin: int) -> None:
         self.sensor = dht.DHT11(Pin(gpio_pin))
 
+    # The DHT11 can be called no more than once per second and the DHT22 once every two
+    # seconds for most accurate results. Sensor accuracy will degrade over time. Each sensor supports a different operating range. Refer to the product datasheets for specifics.
+
     def read_sensor(self) -> tuple[int, int]:
         try:
             self.sensor.measure()
