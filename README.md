@@ -114,15 +114,14 @@ case. It's a devicefile cu.usbmodem14201.
 
 Pins used:
 
- Functionality | physical pin |
-| ----------- | ----------- |
-| 3 Volt out | 36            |
-| Ground | 38               |
-| GPIO27, DHT 11 No1 | 32  |
-| GPIO26, DHT 11 No2 | 31   |
-| GPIO26, DHT 11 No2 | 31   |
-| UART TX 0, LoRa modem | 1               |
-| UART RX 0, LoRa modem | 2               |
+ Functionality | physical pin | logical name |
+| ----------- | ----------- |---|
+| 3 Volt out | 36            | 3V3|
+| Ground | 38               | GND|
+| DHT 11 No1 | 32  | GPIO27|
+| DHT 11 No2 | 31   |GPIO26|
+| LoRa modem TX | 1               |UART0 TX |
+| LoRa modem | 2               |UART0 RX  |
 
 
 # Platform
@@ -150,11 +149,12 @@ provides functionality to support the ***main** function.
 
 | Functionality | File |
 | ----------- | ----------- |
+| Main program, endless loop | main.py |
 | Read temperature and humidity | temphum.py |
+| Post data to DataCake | http_requests.py |
 | Connect to a WIFI network. Source code snatched and rewritten. | wifi.py |
 | Connect to a LoRa network. Source code copied and refactored to suit my means. | lora.py |
-| Post data to **DataCake** | wifi.py |
-| credentials for WIFI and DataCake | datacake_keys.py, keys |
+| Credentials for WIFI and DataCake | datacake_keys.py, keys |
 
 file structure
 ````commandline=
