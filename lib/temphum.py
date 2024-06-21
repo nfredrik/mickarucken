@@ -1,15 +1,21 @@
 import dht
 from machine import Pin
 
+class TempHumError(Exception):
+    ...
 
 class TempHum:
     def __init__(self, gpio_pin: int) -> None:
         self.sensor = dht.DHT11(Pin(gpio_pin))
 
     def read_sensor(self) -> tuple[int, int]:
-        self.sensor.measure()
-        temp = self.sensor.temperature()
-        hum = self.sensor.humidity()
+        try:
+            self.sensor.measure()
+            temp = self.sensor.temperature()
+            hum = self.sensor.humidity()
+        except Exception as err:
+            raise TempHumError(f'Error, failed to read sensors! {err}')
+
         return temp, hum
     
     

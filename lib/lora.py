@@ -11,55 +11,44 @@ class LoRa:
     def __init__(self, debug=True):
         self._serial = UART(0, 115200)  # use RPI PICO GP0 and GP1
         self.debug = debug
-        self.init()
+        self._init()
+
+    # def _old_check_device_connect(self):
+    #     restr = ""
+    #     self._write_cmd("AT+CGMI?\r\n")
+    #     restr = self._get_response()
+    #     if "OK" not in restr:
+    #         return False
+    #     else:
+    #         return True
+
+    # Private methods
+    def _init(self):
+        while not self._check_device_connect():
+            pass
+        if self.debug:
+            print("Module Connected")
+
+        self._write_cmd("AT+CRESTORE\r\n")
+
+        # Disable Log Information
+        # self._write_cmd("AT+ILOGLVL=1\r\n")
+        self._write_cmd("AT+ILOGLVL=5\r\n")
+
+        self._write_cmd("AT+CSAVE\r\n")
+
+        self._write_cmd("AT+IREBOOT=0\r\n")
+
+        time.sleep(1)
+
+        while not self._check_device_connect():
+            pass
 
     def _check_device_connect(self):
         restr = ""
         self._write_cmd("AT+CGMI?\r\n")
         restr = self._get_response()
-        if "OK" not in restr:
-            return False
-        else:
-            return True
-
-    def _ng_check_device_connect(self):
-        restr = ""
-        self._write_cmd("AT+CGMI?\r\n")
-        restr = self._get_response()
         return True if "OK" in restr else False
-
-    def old_check_join_status(self):
-        restr = ""
-        self._write_cmd("AT+CSTATUS?\r\n")
-        restr = self._get_response()
-        if restr.find("+CSTATUS:") != -1:
-            if restr.find("08") != -1:  # or restr.find("07") != -1 or restr.find("08") != -1:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-    def ng_check_join_status(self):
-        restr = ""
-        self._write_cmd("AT+CSTATUS?\r\n")
-        restr = self._get_response()
-        if restr.find("+CSTATUS:") != -1:
-            if "08" in restr:  # or restr.find("07") != -1 or restr.find("08") != -1:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-    def check_join_status(self):
-        restr = ""
-        self._write_cmd("AT+CSTATUS?\r\n")
-        restr = self._get_response()
-        if "+CSTATUS:" in restr and "08" in restr:
-            return True
-
-        return False
 
     def _wait_msg(self, timeout):
         restr = ""
@@ -78,7 +67,7 @@ class LoRa:
         self._serial.write(command)
         time.sleep(0.1)
 
-    def send_msg(self, data, confirm=1, nbtrials=1):
+    def _send_msg(self, data, confirm=1, nbtrials=1):
 
         cmd = f"AT+DTRX={confirm},{nbtrials},{len(data)},{data}\r\n"
         if self.debug:
@@ -91,14 +80,6 @@ class LoRa:
         cmd = f"AT+CDATARATE={sf}\r\n"
         self._write_cmd(cmd)
         self._get_response()
-
-    def receive_msg(self):
-        restr = self._get_response()
-        if restr.find("OK+RECV:") != -1 and restr.find("02,00,00") == -1:
-            data = restr[restr.find("OK+RECV:") + 17:-2]
-            return self._decode_msg(data)
-        else:
-            return ""
 
     def _config_otta(self, device_eui, app_eui, app_key, ul_dl_mode):
         self._write_cmd("AT+CJOINMODE=0\r\n")
@@ -121,10 +102,8 @@ class LoRa:
     def _set_freq_mask(self, mask):
         self._write_cmd("AT+CFREQBANDMASK=" + mask + "\r\n")
 
-    def start_join(self):
-        self._write_cmd("AT+CJOIN=1,0,10,8\r\n")
-
-    def _decode_msg(self, hex_encoded):
+    @staticmethod
+    def _decode_msg(hex_encoded):
         if len(hex_encoded) % 2 == 0:
             buf = hex_encoded
             tempbuf = [None] * len(hex_encoded)
@@ -139,15 +118,6 @@ class LoRa:
         else:
             return hex_encoded
 
-    def _old_get_response(self):
-
-        time.sleep(0.05)
-        restr = self._wait_msg(200)
-        if self.debug:
-            print(restr)
-
-        return restr
-
     def _get_response(self):
 
         time.sleep(0.05)
@@ -157,26 +127,26 @@ class LoRa:
 
         return restr or ""
 
-    def init(self):
-        while not self._check_device_connect():
-            pass
-        if self.debug:
-            print("Module Connected")
+    # Public methods
+    def start_join(self):
+        self._write_cmd("AT+CJOIN=1,0,10,8\r\n")
 
-        self._write_cmd("AT+CRESTORE\r\n")
+    def receive_msg(self):
+        restr = self._get_response()
+        if restr.find("OK+RECV:") != -1 and restr.find("02,00,00") == -1:
+            data = restr[restr.find("OK+RECV:") + 17:-2]
+            return self._decode_msg(data)
+        else:
+            return ""
 
-        # Disable Log Information
-        # self._write_cmd("AT+ILOGLVL=1\r\n")
-        self._write_cmd("AT+ILOGLVL=5\r\n")
+    def check_join_status(self):
+        restr = ""
+        self._write_cmd("AT+CSTATUS?\r\n")
+        restr = self._get_response()
+        if "+CSTATUS:" in restr and "08" in restr:
+            return True
 
-        self._write_cmd("AT+CSAVE\r\n")
-
-        self._write_cmd("AT+IREBOOT=0\r\n")
-
-        time.sleep(1)
-
-        while not self._check_device_connect():
-            pass
+        return False
 
     def configure(self, devui, appeui, appkey):
         print("Module Config...")
@@ -229,7 +199,7 @@ class LoRa:
 
         payload = payload.hex()
 
-        self.send_msg(payload)
+        self._send_msg(payload)
         print("Sent message:", payload)
 
         response = self.receive_msg()

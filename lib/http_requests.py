@@ -24,8 +24,10 @@ def http_alive(url: str = 'http://detectportal.firefox.com/') -> None:
         raise HttpAliveError(f"Error, fail to connect to get correct data: {response.content}")
 
 
-# Have datacake url as parameter?
-def post_values(temp: float, hum: int) -> None:
+# TODO: Have datacake url as parameter?
+# TODO: Add some more data? Number of failures etc?
+
+def post_values(temp: int, hum: int) -> None:
     payload = {
         "serial": DATACAKE_SERIAL,
         "temperature": temp,

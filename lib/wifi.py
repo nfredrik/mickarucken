@@ -7,7 +7,7 @@ class Wifi:
     
     def debug_print(self,text:str,end:str=''):
         if self.debug:
-            print(text)
+            print(text, end=end)
     
     def __init__(self, ssid: str, password: str, debug:bool=False):
         self.debug = debug
