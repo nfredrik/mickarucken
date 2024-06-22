@@ -6,8 +6,8 @@ The project introduces a solution how read humidity and temperature
 using a a DHT11 sensors, Raspberry Pi Pico W and for foward it with help of WIFI or LoRA to 
 visulalize it using DataCake. 
 
-The project introduces a solution to read humidity and temperature using a DHT11 sensor, Raspberry Pi Pico W, and
-forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.”
+The project introduces a solution to read humidity and temperature using a DHT11 sensors, Raspberry Pi Pico W, and
+forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.
 
 This project was part of the course ***23ST-1DT305 Introduction to Applied IoT 2024*** at Linnaeus University,
 Kalmar Sweden.
@@ -23,8 +23,9 @@ I choosen to build an application that could report humidity and temperature fro
 close to Brommaplan in Stockholm Sweden.
 
 My plan was to use LoRa with either Helium or TTN as provider. It turn out that none of these providers
-have coverage in this garden. My plan changed to use LoRa from my apartment since Helium have coverage
-in this area.
+have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
+in this area or use WIFI
+
 
 The purpose with application was to monitor  temperature and humidity and se if the temperature
 changes over time and and there is temperatures at the level of Frost, i.e. temperature goes under 0 C degrees 
@@ -37,22 +38,24 @@ a LoRa gateway in the garden community.
 
 # List of Materials
 
-| Enity | price SEK including VAT|
+| Unit | price SEK including VAT|
 | ----------- | ----------- |
 | Solderless Breadboard 840 tie-points | 69  |
 |USB cable A-male - microB-male| 39 | 
 | Raspberry Pi Pico WH | 109  |
-| 2 Digital temperature and humidity sensor DHT11 | 2* 49 *           |
+| 2 Digital temperature and humidity sensor DHT11 | 2* 49            |
 | M5Stack LoRa module 868MHz | 330     |
 | Jumper wires 40-pin 30cm male/male | 49           |
 | Labbsladd Grove - 0.64mm hylsor 4-pol 200mm| 14.5 |
 
-All equipment purchased from Electrokit
+All equipment purchased from Electrokit.
 
 
 In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1
 
- ![T](./images/pico_w.jpeg)
+
+<img src="images/pico_w.jpeg" alt="drawing" width="200"/>
+
 Fig 1.
 
 
@@ -63,15 +66,17 @@ The DHT11 is a multipurpose device that could provide information about temperat
 It's mounted at a board that a includes a pull-up resistor to make the data signal stronger.
 Fig 2.
 
- ![T](./images/dht11_wiring.jpeg)
+<img src="./images/pico_w.jpeg" alt="drawing" width="200"/>
+
+
 Fig 2.
 
 
-LoRaWAN UNIT 470MHz (ASR6501)
+LoRaWAN UNIT 470MHz (ASR6501), Fig 3
 
- ![T](./images/lora_modem.webp)
+<img src="../images/lora_modem.webp" alt="drawing" width="200"/>
 
-
+Fig 3
 
 
 # Computer setup
