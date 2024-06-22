@@ -1,6 +1,7 @@
-***Fredrik Svärd - fs223sq***
+***Fredrik Svärd - fs223sq*** <img src="./images/logo.png" alt="drawing" width="20"/>
 
 # Overview
+
 
 The project introduces a solution how read humidity and temperature
 using a a DHT11 sensors, Raspberry Pi Pico W and for foward it with help of WIFI or LoRA to 
@@ -52,6 +53,8 @@ All equipment purchased from Electrokit.
 
 
 In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1
+It's  device programmed by MicroPython and has several bands of connectivity. 
+The device has many digital and analog input and outputs and is well suited for an IoT project.
 
 
 <img src="images/pico_w.jpeg" alt="drawing" width="200"/>
@@ -59,20 +62,18 @@ In this project I have chosen to work with the Pico RP2 w device as seen in Fig.
 Fig 1.
 
 
-It's  device programmed by MicroPython and has several bands of connectivity. 
-The device has many digital and analog input and outputs and is well suited for an IoT project.
 
 The DHT11 is a multipurpose device that could provide information about temperature and humudity.
-It's mounted at a board that a includes a pull-up resistor to make the data signal stronger.
-Fig 2.
+It's mounted at a board that a includes a pull-up resistor to make the data signal stronger. Wrong!
 
 <img src="./images/dht11_wiring.jpeg" alt="drawing" width="200"/>
-
 
 Fig 2.
 
 
 LoRaWAN UNIT 470MHz (ASR6501), Fig 3
+
+Write something more here!
 
 <img src="./images/lora_modem.webp" alt="drawing" width="200"/>
 
@@ -161,10 +162,12 @@ provides functionality to support the ***main** function.
 | Connect to a LoRa network. source code copied, se below | lora.py |
 | Credentials for WIFI and DataCake | datacake_keys.py, keys |
 
-Source code for WIFI and LoRa has been copied from https://github.com/iot-lnu/pico-w and refactored
+Source code for WIFI and LoRa has been copied from [^1]  [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w) and
+refactored to some extent.
 
 
-file structure
+The project have the following file structure:
+
 ````commandline=
 .
 ├── LICENSE
@@ -179,11 +182,10 @@ file structure
 └── main.py
 ````
 
-The code have the following structure:
- - The are a setup phase, setting up WIFI, LoRA and sensors. 
- - Runtime phase where sensors are read  and posted to DataCake or some similar system. The intension is to have as much details to the the main function
-as possible, **main** should deal more on behaviour.
-
+#### Reading temperature and humidity
+The core functionality for reading temperature is implemented in  a class **TempHum**. The
+implementation to makes it possible create several objects different input to what pin the
+sensor is attached. Nota Bene: The DHT11 can be called no more than once per second.
 
 ```python
 
@@ -204,6 +206,11 @@ class TempHum:
 
         return temp, hum
 ```
+
+#### Calculating mean value
+
+The function *get_mean_values()* calculates mean values and can handle a list of
+sensor objects. Values outside a range will be discarded.
 
 ```python
 def get_mean_values(sensors: list) -> tuple[int, int]:
@@ -226,6 +233,10 @@ def get_mean_values(sensors: list) -> tuple[int, int]:
 
 ```
 
+
+#### Post values
+post_values posts sensors values to DataCake. An exception will be raised in case of failure.
+
 ```python
 def post_values(temp: int, hum: int) -> None:
     payload = {
@@ -240,6 +251,26 @@ def post_values(temp: int, hum: int) -> None:
 
 ```
 
+
+### main 
+
+The main function calls the provided TempHum-objects, calculate mean values and post i to DataCake.
+This will go on forever in an eternal loop.
+
+main function catch exception and raise exception too.
+
+Problems with sensors could be flagged to DataCake (if it's working). Problem with WIFI or
+LoRA could be flagged with multipurpose LEDS. Red-Blue-Green.
+
+
+The program can be divided int two parts
+
+ - Setup phase, setting up WIFI, LoRA and sensors. 
+
+ - Eternal loop phase where sensors are read  and posted to DataCake or some similar system. 
+   The intension is to have as much details to the the main function  as possible, **main** 
+   should deal more on behaviour.
+   
 ```python
 import sys
 from time import sleep
@@ -304,8 +335,8 @@ if __name__ == "__main__":
 ```
 
 
-The rest of the source code is provided in in this repo. Please check these of reading of temperature and humidity is 
-done and setup of Wifi and LoRa and code for forwarding data to the cloud.
+The rest of the source code is provided in in this repo. Please check these of  setup of Wifi and LoRa and code.
+The code as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
 
 
 # Finalizing the design
@@ -408,6 +439,11 @@ Sent message: ff7201a9
 
  ![Tux, the Linux mascot](./images/datacake.png)
 
+
+
+
+
+[^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
 
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
