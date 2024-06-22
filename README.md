@@ -74,7 +74,7 @@ Fig 2.
 
 LoRaWAN UNIT 470MHz (ASR6501), Fig 3
 
-<img src="../images/lora_modem.webp" alt="drawing" width="200"/>
+<img src="./images/lora_modem.webp" alt="drawing" width="200"/>
 
 Fig 3
 
