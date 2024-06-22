@@ -1,11 +1,6 @@
-***Fredrik Svärd - fs223sq*** <img src="./images/logo.png" alt="drawing" width="20"/>
+<img src="./images/logo.png" alt="drawing" width="20"/> ***Fredrik Svärd - fs223sq*** 
 
 # Overview
-
-
-The project introduces a solution how read humidity and temperature
-using a a DHT11 sensors, Raspberry Pi Pico W and for foward it with help of WIFI or LoRA to 
-visulalize it using DataCake. 
 
 The project introduces a solution to read humidity and temperature using a DHT11 sensors, Raspberry Pi Pico W, and
 forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.
@@ -23,19 +18,14 @@ the prerequisite harddware and software setup.
 I choosen to build an application that could report humidity and temperature from garden community 
 close to Brommaplan in Stockholm Sweden.
 
-My plan was to use LoRa with either Helium or TTN as provider. It turn out that none of these providers
+My plan was to use LoRa with either Helium or TTN as provider. It turns out that none of these providers
 have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
-in this area or use WIFI
+in this area and if that doesnt work go for WIFI
 
-
-The purpose with application was to monitor  temperature and humidity and se if the temperature
-changes over time and and there is temperatures at the level of Frost, i.e. temperature goes under 0 C degrees 
-during spring.
-
-I think it will be possible to get some insight on how to use LoRa and perhaps lobby for installing
-a LoRa gateway in the garden community.
-
-
+The purpose with application was to monitor  temperature and humidity and see if the temperature
+changes over time and and there is temperatures at the level of Frost.This typically happens during
+the night when the air temperature drops and moisture in the air condenses and 
+freezes on surfaces like grass, car windows, and roofs.
 
 # List of Materials
 
@@ -44,20 +34,19 @@ a LoRa gateway in the garden community.
 | Solderless Breadboard 840 tie-points | 69  |
 |USB cable A-male - microB-male| 39 | 
 | Raspberry Pi Pico WH | 109  |
-| 2 Digital temperature and humidity sensor DHT11 | 2* 49            |
-| M5Stack LoRa module 868MHz | 330     |
-| Jumper wires 40-pin 30cm male/male | 49           |
-| Labbsladd Grove - 0.64mm hylsor 4-pol 200mm| 14.5 |
+| 2 Digital temperature and humidity sensor DHT11 | 2 * 49   |
+| M5Stack LoRa module ASR6501 868MHz including antenna | 330  |
+| Jumper wires 40-pin 30cm male/male | 49   |
+| Lab cord Grove - 0.64mm sockets 4-pol 200mm| 14.5 |
 
 All equipment purchased from Electrokit.
 
 
 In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1
-It's  device programmed by MicroPython and has several bands of connectivity. 
+It's  device can be programmed with MicroPython and has several bands of connectivity. 
 The device has many digital and analog input and outputs and is well suited for an IoT project.
 
-
-<img src="images/pico_w.jpeg" alt="drawing" width="200"/>
+<img src="images/pico_w.jpeg" alt="drawing" width="300"/>
 
 Fig 1.
 
@@ -66,7 +55,7 @@ Fig 1.
 The DHT11 is a multipurpose device that could provide information about temperature and humudity.
 It's mounted at a board that a includes a pull-up resistor to make the data signal stronger. Wrong!
 
-<img src="./images/dht11_wiring.jpeg" alt="drawing" width="200"/>
+<img src="./images/dht11_wiring.jpeg" alt="drawing" width="100"/>
 
 Fig 2.
 
@@ -75,7 +64,7 @@ LoRaWAN UNIT 470MHz (ASR6501), Fig 3
 
 Write something more here!
 
-<img src="./images/lora_modem.webp" alt="drawing" width="200"/>
+<img src="./images/lora_modem.jpeg" alt="drawing" width="200"/>
 
 Fig 3
 
@@ -85,6 +74,8 @@ Fig 3
 How is the device programmed. Which IDE are you using. Describe all steps from flashing the firmware,
 installing plugins in your favorite editor. How flashing is done on MicroPython. The aim is that a
 beginner should be able to understand.
+
+
 I have tried different type of Integrated Development Environment, IDE, like Pycharm, VScode and Thonny.
 Thonny worked best when it comes to loading the target, i.e. Pico W, so I picked Thonny. The other
 have better advantages when comes to supporting python.
@@ -122,12 +113,12 @@ Pins used:
 
  Functionality | physical pin | logical name |
 | ----------- | ----------- |---|
-| 3 Volt out | 36            | 3V3|
+| 3 Volt out | 36            | 3V3(OUT) |
 | Ground | 38               | GND|
 | DHT 11 No1 | 32  | GPIO27|
 | DHT 11 No2 | 31   |GPIO26|
-| LoRa modem TX | 1               |UART0 TX |
-| LoRa modem | 2               |UART0 RX  |
+| LoRa modem TX | 1   |UART0 TX |
+| LoRa modem | 2  |UART0 RX  |
 
 
 # Platform
@@ -145,9 +136,6 @@ have I think it's a good fit.
 
 # The code
 
-# Explain your code!
-Transmitting the data / connectivity
-How is the data transmitted to the internet or local server? Describe the package format. All the different steps that are needed in getting the data to your end-point. Explain both the code and choice of wireless protocols.
 
 The file structure of the project it's simple. There is a ***main** function and number of files that
 provides functionality to support the ***main** function.
@@ -158,13 +146,12 @@ provides functionality to support the ***main** function.
 | Main program, endless loop | main.py |
 | Read temperature and humidity | temphum.py |
 | Post data to DataCake | http_requests.py |
-| Connect to a WIFI network. source code copied, se below | wifi.py |
-| Connect to a LoRa network. source code copied, se below | lora.py |
+| Connect to a WIFI network | wifi.py |
+| Connect to a LoRa network | lora.py |
 | Credentials for WIFI and DataCake | datacake_keys.py, keys |
 
-Source code for WIFI and LoRa has been copied from [^1]  [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w) and
-refactored to some extent.
-
+Source code for WIFI and LoRa has been copied from [^1]  [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
+I am truly thankful for this support! Part of the that source code is rewritten to suit my means.
 
 The project have the following file structure:
 
@@ -182,10 +169,15 @@ The project have the following file structure:
 └── main.py
 ````
 
+Support functions reside under the lib-folder. This i also a folder that the micropython interpreter will look at
+to find files for import. The main file resides under the root.
+
+
 #### Reading temperature and humidity
 The core functionality for reading temperature is implemented in  a class **TempHum**. The
-implementation to makes it possible create several objects different input to what pin the
-sensor is attached. Nota Bene: The DHT11 can be called no more than once per second.
+implementation to makes it possible create several objects dependent what pin the
+sensor is attached to. Nota Bene: The DHT11 can be called no more than once per second.
+In case of reading error a exception will be raised. The caller needs to take care of the exception.
 
 ```python
 
@@ -235,7 +227,8 @@ def get_mean_values(sensors: list) -> tuple[int, int]:
 
 
 #### Post values
-post_values posts sensors values to DataCake. An exception will be raised in case of failure.
+
+Posts values from sensors to DataCake. An exception will be raised in case of failure, bad reply from DataCake.
 
 ```python
 def post_values(temp: int, hum: int) -> None:
@@ -251,24 +244,23 @@ def post_values(temp: int, hum: int) -> None:
 
 ```
 
-
 ### main 
 
-The main function calls the provided TempHum-objects, calculate mean values and post i to DataCake.
+The main function calls the provided TempHum-objects, calculate mean values and post it to DataCake.
 This will go on forever in an eternal loop.
 
-main function catch exception and raise exception too.
+main function catch exceptions and raise exception too.
 
-Problems with sensors could be flagged to DataCake (if it's working). Problem with WIFI or
+Problems with sensors could be flagged to DataCake. Problem with WIFI or
 LoRA could be flagged with multipurpose LEDS. Red-Blue-Green.
 
 
-The program can be divided int two parts
+The program can be divided int two parts:
 
  - Setup phase, setting up WIFI, LoRA and sensors. 
 
- - Eternal loop phase where sensors are read  and posted to DataCake or some similar system. 
-   The intension is to have as much details to the the main function  as possible, **main** 
+ - Eternal loop phase where sensors are read and posted to DataCake or some similar systems. 
+   The intention is to have as little knowledge of hardware or how data is sent the main function as possible, **main** 
    should deal more on behaviour.
    
 ```python
@@ -333,27 +325,18 @@ if __name__ == "__main__":
     sys.exit(main())
 
 ```
-
-
 The rest of the source code is provided in in this repo. Please check these of  setup of Wifi and LoRa and code.
 The code as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
 
 
 # Finalizing the design
-Show the final results of your project. Give your final thoughts on how you think the project went. What could have been done in an other way, or even better? Pictures are nice!
+Show the final results of your project. Give your final thoughts on how you think the project went. What could 
+have been done in an other way, or even better? Pictures are nice!
 
-
-Show final results of the project
-Pictures
-*Video presentation
-Last changed by
-T
 
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
 
  ![Tux, the Linux mascot](./images/skiss.jpeg)
-
-
 
 
 # Transmitting the data / connectivity
