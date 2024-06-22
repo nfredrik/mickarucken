@@ -60,9 +60,12 @@ It's mounted at a board that a includes a pull-up resistor to make the data sign
 Fig 2.
 
 
-LoRaWAN UNIT 470MHz (ASR6501), Fig 3
 
-Write something more here!
+
+
+LoRaWAN868(ASR6501) Unit is a LoRaWAN communication module designed for the 868MHz frequency range. 
+It supports the LoRaWAN protocol. The module utilizes a serial communication interface and 
+can be controlled using the AT command set. Fig 3.
 
 <img src="./images/lora_modem.jpeg" alt="drawing" width="200"/>
 
@@ -132,6 +135,7 @@ I choosen DataCake since it's easy and not to much work to get it going. With th
 have I think it's a good fit.
 
 
+ ![Tux, the Linux mascot](./images/datacake.png)
 
 
 # The code
@@ -339,28 +343,27 @@ have been done in an other way, or even better? Pictures are nice!
  ![Tux, the Linux mascot](./images/skiss.jpeg)
 
 
+
+
 # Transmitting the data / connectivity
 
-
-# Wifi track
-
-# LoRa track
-
-My primary was to have an application using LoRa, so that was my first attempt. I started to connect
-the LoRa modem and and the provided example code from the common github repo provided på LNU. I tried
+My primary goal was to have an application using LoRa, so that was my first attempt. I started to connect
+the LoRa module and and the provided example code from the common github repo provided på LNU. I tried
 a number of combination and altered the code bit by bit. I moved the application and equipment to
-the roof of our buildning. In the end of the setup of the modem there is a status check checking the
-modem have connected to the network. Often I got halfway, saying: "There is data sent and success", code for this 
-is "03" but the status expects "There is data sent and success, there is download too.". This did never happened.
-I enabled loggning the modem, and suddenly it started to work....
+the roof of our buildning. 
+
+The python code for LoRA sends a number of **AT-commands** to the module. At a point it starts to
+initiate a join() to the network and than use the **AT-command CSTATUS** 
+
+ ![Tux, the Linux mascot](./images/cstatus.png)
 
 
-Unit LoRaWAN868 is a LoRaWAN communication module suitable for 868MHz frequency launched by M5Stack. 
-The module adopts the ASR6501 scheme, which supports long-distance communication and has both ultra-low power
-consumption and high sensitivity. The module integrates the LoRaWAN protocol stack and adopts a serial communication
-interface (using the AT command set for control). When used, it can be used as a collection node to access a large 
-number of gateways for data collection and management. This module is suitable for long-distance low-power IoT
-communication applications, such as deployment of environmental monitoring nodes.
+In the end of the setup of the modem there is a status check checking the
+modem have connected to the network. Often I got halfway, saying: **There is data sent and success**, status code for this 
+is **03** but the status,check_join_status() se below,  expects **There is data sent and success, there is download too.**
+equal to status code **08**
+This did never happened. I enabled loggning the modem, and suddenly it started to work....
+
 
  ![Tux, the Linux mascot](./images/lora_overview.png)
 
@@ -374,7 +377,7 @@ def check_join_status(self):
 
         return False
 ```
-Note the credantinals are fake values
+Note the credentials are fake values
 ```commandline
 >>> %Run -c $EDITOR_CONTENT
 
@@ -417,10 +420,7 @@ b'AT+DTRX=1,1,8,ff7201a9\r\n'b'\r\n'b'ERR+SEND:00\r\n'
 Sent message: ff7201a9
 ```
 
- ![Tux, the Linux mascot](./images/cstatus.png)
 
-
- ![Tux, the Linux mascot](./images/datacake.png)
 
 
 
