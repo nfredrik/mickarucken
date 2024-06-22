@@ -66,7 +66,7 @@ The DHT11 is a multipurpose device that could provide information about temperat
 It's mounted at a board that a includes a pull-up resistor to make the data signal stronger.
 Fig 2.
 
-<img src="./images/pico_w.jpeg" alt="drawing" width="200"/>
+<img src="./images/dht11_wiring.jpeg" alt="drawing" width="200"/>
 
 
 Fig 2.
