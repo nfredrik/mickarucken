@@ -79,49 +79,31 @@ Fig 3
 
 # Computer setup
 
-
-How is the device programmed. Which IDE are you using. Describe all steps from flashing the firmware,
-installing plugins in your favorite editor. How flashing is done on MicroPython. The aim is that a
-beginner should be able to understand.
-
-
-##Install Thonny
-
-
-To upper left indicates the folder for the files for the project. All resides
-on my computer.
-
-Th lower right you can see that the Pico W is ocnnected. The IDE detects the
-target when launched. Everything is a file in Linux, that is the case for the target in this
-case. It's a devicefile cu.usbmodem14201.
-
-
-
-
 My host operation system is MacOs/Unix.
 
 I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
-Thonny worked best when it comes to loading the target, i.e. Pico W, so I picked Thonny. The other
-two have better supports when comes to programming python.
+Thonny worked best when it comes to loading and commence exuction on the target, i.e. Pico W, so I picked Thonny. The other
+two have better supports when comes to programming python, but since project i small it works well with Thonny.
 
 #### Flash Micropython to Raspberry Pico W
 
-When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot+.
-To be able to load an application code the Pico W need firmware. This is easily achived by downloading
-firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ )and that drag and drop
-it to the the RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
+When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
+To be able to load an application code the Pico W needs firmware. This is easily achived by downloading
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ )and that drag and drop to dowloaded
+fil to the the RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
-#### Overview over Thonny
+#### Overview, Thonny
 
 First view of the Thony IDE. Marked in a blue rectangle, the root folder of the project
 and the source code. Marked in red rectangle the files on the target, i.e. the Pico W. Marked in green rectangle
 shows that the IDE have contact with the target. As seen it shows up as a device file. (everything is
-a file in unix :-)). Marked in black rectangle, possible to upload folder/files from your computer 
+a file in unix :-)). Marked in black rectangle, a feature that makes it possible to upload folder/files from your computer 
 to the target.
+
 
 ![Tux, the Linux mascot](./images/thonny_base.png)
 
-When trying to open a folder the IDE prompt with a choice to either open on your computer
+When trying to open a folder the IDE prompts with a choice to either open files on your computer
 or on the target.
 
 ![Tux, the Linux mascot](./images/foldern.png)
@@ -131,6 +113,7 @@ select main.py and push **OK** button
 
 ![Tux, the Linux mascot](./images/run_target.png)
 
+Next step is to commence execution by pushing the green button, marked in red.
 
 
 # Circuit diagram (can be hand drawn)
@@ -146,9 +129,20 @@ Pins used:
 | Ground | 38               | GND|
 | DHT 11 No1 | 32  | GPIO27|
 | DHT 11 No2 | 31   |GPIO26|
-| DHT 11 No2 | 29   |GPIO22|
+| DHT 11 No3 | 29   |GPIO22|
 | LoRa modem TX | 1   |UART0 TX |
 | LoRa modem | 2  |UART0 RX  |
+
+All devices are connected to the power supply provided by Pico W.
+
+One of the DHT11 do not have a board, so there was a need of a externnal resistor
+4.7 kohm as pull resistor to power supply, see figure 4
+
+![](./images/dht_koppling.png)
+
+fig 4.
+
+
 
  ![Tux, the Linux mascot](./images/skiss.jpeg)
 
@@ -204,8 +198,8 @@ function Decoder(request) {
 # The code
 
 
-The file structure of the project it's simple. There is a ***main** function and number of files that
-provides functionality to support the ***main** function.
+The file structure of the project it's simple. There is a **main()**-function and number of files that
+provides functionality to support the **main** function.
 
 
 | Functionality | File |
@@ -237,13 +231,13 @@ The project have the following file structure:
 ````
 
 Support functions reside under the lib-folder. This i also a folder that the micropython interpreter will look at
-to find files for import. The main file resides under the root.
+to find files for import. The main file resides under the project root.
 
 
 #### Reading temperature and humidity
-The core functionality for reading temperature is implemented in  a class **TempHum**. The
-implementation to makes it possible create several objects dependent what pin the
-sensor is attached to. Nota Bene: The DHT11 can be called no more than once per second.
+
+The core functionality for reading temperature and humidity is implemented in  a class **TempHum**. The
+implementation makes it possible create several objects but different logical pin anmes. Nota Bene: The DHT11 can be called no more than once per second.
 In case of reading error a exception will be raised. The caller needs to take care of the exception.
 
 ```python
@@ -269,7 +263,7 @@ class TempHum:
 
 #### Calculating mean value
 
-The function *get_mean_values()* calculates mean values and can handle a list of
+The function **get_mean_values()** calculates mean values and can handle a list of
 sensor objects. Values outside a range will be discarded. This application uses
 3 DHT11 and select two of them, i.e. the ones closest in measurement and than
 build a mean value for temperature and humidity.
@@ -304,9 +298,6 @@ def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
         if 0 <= hum <= 100:
             hums.append(hum)
 
-    print(f"temps: {temps}")
-    print(f"hums: {hums}")
-
     valid_temps = closest_pair(temps)
     valid_hums = closest_pair(hums)
 
@@ -320,7 +311,8 @@ def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
 
 #### Post values
 
-Post values from sensors to DataCake. An exception will be raised in case of failure, bad reply from DataCake.
+Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. bad reply from DataCake
+other errors.
 
 ```python
 def post_values(temp: int, hum: int) -> None:
@@ -339,7 +331,9 @@ def post_values(temp: int, hum: int) -> None:
         raise DataCakeError(f"Error, failed to post data! {response.status_code}")
 ```
 
-problems with posting
+I have observed that sometimes there is a problem with posting due memory problem (ENOMEM). I that
+momement I don't know the root cause of this problem.
+
 ```commandline
 Temperature: 25.5 C Humidity: 32.5 %
 Temperature: 25.5 C Humidity: 32.5 %
@@ -347,36 +341,23 @@ Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
 Temperature: 25.5 C Humidity: 32.5 %
 Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
 Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-Temperature: 25.5 C Humidity: 32.5 %
-Temperature: 25.5 C Humidity: 32.5 %
+
 ```
 
 ### main 
 
-The main function calls the provided TempHum-objects, calculate mean values and post it to DataCake.
-This will go on forever in an eternal loop.
-
-main function catch exceptions and raise exception too.
-
-Problems with sensors could be flagged to DataCake. Problem with WIFI or
-LoRA could be flagged with multipurpose LEDS. Red-Blue-Green.
-
+The **main()** function calls the provided TempHum-objects, calculate mean values and post it to DataCake.
+This will go on forever in an eternal loop. **main()** function catch exceptions and raise exception too. 
+Only a user intervention terminates the program. A periodic timer toggles the builtin LED if the Wifi connection
+is alive.
 
 The program can be divided int two parts:
 
  - Setup phase, setting up WIFI, LoRA and sensors. 
 
  - Eternal loop phase where sensors are read and posted to DataCake or some similar systems. 
-   The intention is to have as little knowledge of hardware or how data is sent the main function as possible, **main** 
-   should deal more on behaviour.
+   The intention is to have as little knowledge of the underlaying functionality, promote readability
+   and if needed dig deeper, like how Wifi is set up or sensors are read.
    
 ```python
 def main():
@@ -409,8 +390,7 @@ def main():
 
             lora.send_over_lora(temp=temp, hum=hum)
 
-            
-
+    
         except TempHumError as err:
             print(f"Error, {err}")
 
@@ -431,11 +411,11 @@ if __name__ == "__main__":
 
 
 ```
-The rest of the source code is provided in in this repo. Please check these of  setup of Wifi and LoRa and code.
+The rest of the source code is provided in this repo. Please check setup of Wifi and LoRa.
 The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
 
-
 # Finalizing the design
+
 Show the final results of your project. Give your final thoughts on how you think the project went. What could 
 have been done in an other way, or even better? Pictures are nice!
 

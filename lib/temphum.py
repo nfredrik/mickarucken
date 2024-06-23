@@ -54,9 +54,6 @@ def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
         if 0 <= hum <= 100:
             hums.append(hum)
 
-    print(f"temps: {temps}")
-    print(f"hums: {hums}")
-
     valid_temps = closest_pair(temps)
     valid_hums = closest_pair(hums)
 
