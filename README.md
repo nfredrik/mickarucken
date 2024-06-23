@@ -150,11 +150,14 @@ Pins used:
 | LoRa modem TX | 1   |UART0 TX |
 | LoRa modem | 2  |UART0 RX  |
 
+ ![Tux, the Linux mascot](./images/skiss.jpeg)
+
+
 
 # Platform
 
 I choosen DataCake since it's easy and not to much work to get it going. With the measurement I 
-have I think it's a good fit. Apart from settning up the acount on DataCake need to configure
+have I think it's a good fit. Apart from setting up the acount on DataCake need to configure
 how the data that arrives should be decoded, see below and how it should be presented in   Dashboard.
 
 DataCake is free for small amount of data.
@@ -163,7 +166,6 @@ DataCake generates a serial number that the application program in target should
 will be able to identify from where the data is coming.
 
 
-![Tux, the Linux mascot](./images/datacake.png)
 
 
 Decoder code in DataLake, written i javscript ....
@@ -440,9 +442,6 @@ have been done in an other way, or even better? Pictures are nice!
 
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
 
- ![Tux, the Linux mascot](./images/skiss.jpeg)
-
-
 
 
 # Transmitting the data / connectivity
@@ -525,6 +524,17 @@ Sent message: ff7201a9
 
 
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
+
+
+# Definitions
+
+LoRa - Long Range ....
+
+Helium -
+
+TTN
+
+WiFi
 
 
 
