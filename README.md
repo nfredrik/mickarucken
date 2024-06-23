@@ -207,8 +207,8 @@ provides functionality to support the **main** function.
 
 | Functionality | File |
 | ----------- | ----------- |
-| Main program, endless loop | main.py |
-| Read temperature and humidity | temphum.py |
+| Main program, setup and endless loop | main.py |
+| Read temperature and humidity. Calculate mean values | temphum.py |
 | Post data to DataCake | http_requests.py |
 | Connect to a WIFI network | wifi.py |
 | Connect to a LoRa network | lora.py |
