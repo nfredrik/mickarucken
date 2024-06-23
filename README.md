@@ -62,6 +62,9 @@ Figure 2 shows the one mounted on a board including a resistor.
 
 <img src="./images/dht11_wiring.jpeg" alt="drawing" width="100"/>
 
+<img src="./images/dht11_without.png" alt="drawing" width="100"/>
+
+
 Fig 2.
 
 
@@ -72,7 +75,7 @@ LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MH
 It supports the LoRaWAN protocol. The module utilizes a serial communication interface and 
 can be controlled using the AT command set. Fig 3.
 
-<img src="./images/lora_modem.jpeg" alt="drawing" width="200"/>
+<img src="./images/lora_modem.png" alt="drawing" width="200"/>
 
 Fig 3
 
@@ -332,7 +335,7 @@ def post_values(temp: int, hum: int) -> None:
 ```
 
 I have observed that sometimes there is a problem with posting due memory problem (ENOMEM). I that
-momement I don't know the root cause of this problem.
+moment I don't know the root cause of this problem.
 
 ```commandline
 Temperature: 25.5 C Humidity: 32.5 %
@@ -420,7 +423,17 @@ Show the final results of your project. Give your final thoughts on how you thin
 have been done in an other way, or even better? Pictures are nice!
 
 
+
+
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
+
+
+The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
+Stockholm. I should have spent more time on investigate more about coverage. I'm a bit dispointed since the
+coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
+solution.  If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
+included in any of the starter kits that I bought. I should have spent more time on tools for visualsation too.
+
 
 
 
