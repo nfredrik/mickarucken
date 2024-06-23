@@ -53,7 +53,12 @@ Fig 1.
 
 
 The DHT11 is a multipurpose device that could provide information about temperature and humudity.
-It's mounted at a board that a includes a pull-up resistor to make the data signal stronger. Wrong!
+It's mounted at a board that a includes a pull-up resistor.
+
+Pull-up resistors may be used at logic outputs where the logic device cannot source current such as 
+open-collector TTL logic devices.
+
+Using a budget Triple Modular Redundancy (TMR) for the DHT11 :-)
 
 <img src="./images/dht11_wiring.jpeg" alt="drawing" width="100"/>
 
@@ -74,21 +79,11 @@ Fig 3
 
 # Computer setup
 
+
 How is the device programmed. Which IDE are you using. Describe all steps from flashing the firmware,
 installing plugins in your favorite editor. How flashing is done on MicroPython. The aim is that a
 beginner should be able to understand.
 
-
-I have tried different type of Integrated Development Environment, IDE, like Pycharm, VScode and Thonny.
-Thonny worked best when it comes to loading the target, i.e. Pico W, so I picked Thonny. The other
-have better advantages when comes to supporting python.
-
-When connecting the Pico the first time it shows up as a USB device if the push-button is actived.
-To be able to load an application code the Pico W need firmware. This is easily achived by downloading
-firmware from this site and that drag and drop it the the RP2 device. The firmware will be loaded
-and when finished, rebooted by itself.
-
-I use a MacOS as operating system
 
 ##Install Thonny
 
@@ -104,6 +99,39 @@ case. It's a devicefile cu.usbmodem14201.
 
 
 ## Flash Micropython to Raspberry Pico W
+
+
+
+I have tried different type of Integrated Development Environment, IDE, like Pycharm, VScode and Thonny.
+Thonny worked best when it comes to loading the target, i.e. Pico W, so I picked Thonny. The other
+have better advantages when comes to supporting python.
+
+When connecting the Pico the first time it shows up as a USB device if the push-button is actived.
+To be able to load an application code the Pico W need firmware. This is easily achived by downloading
+firmware from this site and that drag and drop it the the RP2 device. The firmware will be loaded
+and when finished, rebooted by itself.
+
+I use a MacOS as operating system
+
+
+First view of the Thoony IDE. Marked in a blue rectangle, the root folder of the project
+and the source code. Marked in red rectangle the files on the target, i.e. the Pico W. Marked in green rectangle
+shows that the IDE have contact with the target. As seen it shows up as a device file. (everything is
+a file in unix :-)).  Marked in black rectangle, possible to copy files from your computer 
+to the target.
+
+![Tux, the Linux mascot](./images/thonny_base.png)
+
+When trying to open a folder the IDE prompt with a choice to either open on your computer
+or on the target.
+
+![Tux, the Linux mascot](./images/foldern.png)
+
+When chosen RP2040 device there a new window to select files to execute. In this case
+select main.py and push **OK** button
+
+![Tux, the Linux mascot](./images/run_target.png)
+
 
 
 
@@ -136,6 +164,38 @@ have I think it's a good fit.
 
 
  ![Tux, the Linux mascot](./images/datacake.png)
+
+
+Decoder code in DataLake, written i javscript ....
+
+```javascript=
+function Decoder(request) {
+  
+    // First, parse the request body into a JSON object to process it
+    var payload = JSON.parse(request.body)
+    
+    var serialNumber = payload.serial
+
+
+    /*
+    Sample return format:
+    If you wish to manually return a fixed structure, Datacake API devices require the following format:
+    */
+    return [
+        {
+            device: serialNumber, 
+            field: "TEMPERATURE",
+            value: payload.temperature
+        },
+        {
+            device: serialNumber,
+            field: "HUMIDITY",
+            value: payload.humidity
+        }
+    ];
+    
+}
+```
 
 
 # The code
@@ -246,6 +306,26 @@ def post_values(temp: int, hum: int) -> None:
     if response.status_code != HTTPStatus.OK:
         raise DataCakeError(f"Error, failed to post data! {response.status_code}")
 
+```
+
+problems with posting
+```commandline
+Temperature: 25.5 C Humidity: 32.5 %
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Temperature: 25.5 C Humidity: 32.5 %
+Temperature: 25.5 C Humidity: 32.5 %
 ```
 
 ### main 
@@ -430,3 +510,22 @@ Sent message: ff7201a9
 
 
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
+
+
+#TODOs
+
+I exprienced not that high accurary on the DHT, for that reason I did mount 3 DHT
+and make a comparision and picked to 2 best ones for a mean value :-)
+
+
+Sometimes I get a OSerror when posting data to DataCake!! why put in safety net!!
+
+
+
+temps: [25, 26, 26]
+hums: [51, 48, 56]
+Temperature: 26.0 C Humidity: 26.0 %
+temps: [25, 26, 26]
+hums: [51, 48, 56]
+Temperature: 26.0 C Humidity: 26.0 %
+

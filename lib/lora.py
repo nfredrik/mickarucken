@@ -4,23 +4,20 @@ import time
 from machine import UART
 
 
-# https://m5stack.oss-cn-shenzhen.aliyuncs.com/resource/docs/datasheet/unit/lorawan/ASR650X%20AT%20Command%20Introduction-20190605.pdf
+class LoRaTimeout(Exception):
+    ...
+
 
 class LoRa:
+    TIMEOUT = 30
+    LOG_LEVEL = 1
+    FREQ = "869525000"
 
-    def __init__(self, debug=True):
+    def __init__(self, debug=False):
         self._serial = UART(0, 115200)  # use RPI PICO GP0 and GP1
         self.debug = debug
+        self.lora_enabled = False
         self._init()
-
-    # def _old_check_device_connect(self):
-    #     restr = ""
-    #     self._write_cmd("AT+CGMI?\r\n")
-    #     restr = self._get_response()
-    #     if "OK" not in restr:
-    #         return False
-    #     else:
-    #         return True
 
     # Private methods
     def _init(self):
@@ -32,8 +29,7 @@ class LoRa:
         self._write_cmd("AT+CRESTORE\r\n")
 
         # Disable Log Information
-        # self._write_cmd("AT+ILOGLVL=1\r\n")
-        self._write_cmd("AT+ILOGLVL=5\r\n")
+        self._write_cmd(f"AT+ILOGLVL={self.LOG_LEVEL}\r\n")
 
         self._write_cmd("AT+CSAVE\r\n")
 
@@ -102,19 +98,11 @@ class LoRa:
     def _set_freq_mask(self, mask):
         self._write_cmd("AT+CFREQBANDMASK=" + mask + "\r\n")
 
+
     @staticmethod
     def _decode_msg(hex_encoded):
         if len(hex_encoded) % 2 == 0:
-            buf = hex_encoded
-            tempbuf = [None] * len(hex_encoded)
-            i = 0
-            loop = 2
-            while loop < len(hex_encoded) + 1:
-                tmpstr = buf[loop - 2:loop]
-                tempbuf[i] = chr(int(tmpstr, 16))
-                i += 1
-                loop += 2
-            return "".join(tempbuf)
+            return "".join(chr(int(hex_encoded[i:i + 2], 16)) for i in range(0, len(hex_encoded), 2))
         else:
             return hex_encoded
 
@@ -127,6 +115,15 @@ class LoRa:
 
         return restr or ""
 
+    def _check_join_status(self):
+        restr = ""
+        self._write_cmd("AT+CSTATUS?\r\n")
+        restr = self._get_response()
+        if "+CSTATUS:" in restr and "08" in restr:
+            return True
+
+        return False
+
     # Public methods
     def start_join(self):
         self._write_cmd("AT+CJOIN=1,0,10,8\r\n")
@@ -138,15 +135,6 @@ class LoRa:
             return self._decode_msg(data)
         else:
             return ""
-
-    def check_join_status(self):
-        restr = ""
-        self._write_cmd("AT+CSTATUS?\r\n")
-        restr = self._get_response()
-        if "+CSTATUS:" in restr and "08" in restr:
-            return True
-
-        return False
 
     def configure(self, devui, appeui, appkey):
         print("Module Config...")
@@ -163,24 +151,32 @@ class LoRa:
         self._set_spreading_factor("5")
 
         # LoRaWAN868
-        # TODO: Wrong freq?
-        self._set_rx_window("869525000")
+        self._set_rx_window(self.FREQ)
 
         self._set_freq_mask("0001")
 
     def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
 
-        # lora.configure(DEV_EUI, APP_EUI, APP_KEY)
         self.configure(dev_eui, app_eui, app_key)
 
         self.start_join()
-        print("Start Join.....")
-        while not self.check_join_status():
-            print("Joining....")
+        print("Start Join LoRa.....")
+        timeout = time.time() + self.TIMEOUT
+        while not self._check_join_status():
+            print('.', end='')
+
+            if time.time() > timeout:
+                raise LoRaTimeout('Error failed to connect, timeout!')
+
             time.sleep(1)
         print("Join success!")
+        self.lora_enabled = True
 
     def send_over_lora(self, temp: int, hum: int):
+
+        if not self.lora_enabled:
+            return
+
         # Reading from sensor should be done here
 
         # Example temperature (in Celsius) and humidity (%) values with a negative temperature
