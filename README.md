@@ -34,7 +34,8 @@ freezes on surfaces like grass, car windows, and roofs.
 | Solderless Breadboard 840 tie-points | 69  |
 |USB cable A-male - microB-male| 39 | 
 | Raspberry Pi Pico WH | 109  |
-| 2 Digital temperature and humidity sensor DHT11 | 2 * 49   |
+| 3 Digital temperature and humidity sensor DHT11 | 3 * 49   |
+| 4.7 kohm resistor | 1  |
 | M5Stack LoRa module ASR6501 868MHz including antenna | 330  |
 | Jumper wires 40-pin 30cm male/male | 49   |
 | Lab cord Grove - 0.64mm sockets 4-pol 200mm| 14.5 |
@@ -42,7 +43,7 @@ freezes on surfaces like grass, car windows, and roofs.
 All equipment purchased from Electrokit.
 
 
-In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1
+In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1.
 It's  device can be programmed with MicroPython and has several bands of connectivity. 
 The device has many digital and analog input and outputs and is well suited for an IoT project.
 
@@ -50,15 +51,14 @@ The device has many digital and analog input and outputs and is well suited for 
 
 Fig 1.
 
-
-
 The DHT11 is a multipurpose device that could provide information about temperature and humudity.
-It's mounted at a board that a includes a pull-up resistor.
+It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. Two with boards
+one without. The one without needed a external resistor 4.7 kohm.
 
-Pull-up resistors may be used at logic outputs where the logic device cannot source current such as 
-open-collector TTL logic devices.
+I noticed early that the accuracy of the DHT11 was not than good, so I decided to  do budget Triple Modular Redundancy (TMR).
+Out of three always pick 2 ones closest to each other in temperature and humidity.
 
-Using a budget Triple Modular Redundancy (TMR) for the DHT11 :-)
+Figure 2 shows the one mounted on a board including a resistor.
 
 <img src="./images/dht11_wiring.jpeg" alt="drawing" width="100"/>
 
@@ -68,7 +68,7 @@ Fig 2.
 
 
 
-LoRaWAN868(ASR6501) Unit is a LoRaWAN communication module designed for the 868MHz frequency range. 
+LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MHz frequency range. 
 It supports the LoRaWAN protocol. The module utilizes a serial communication interface and 
 can be controlled using the AT command set. Fig 3.
 
@@ -87,7 +87,6 @@ beginner should be able to understand.
 
 ##Install Thonny
 
- ![Tux, the Linux mascot](./images/thonny.png)
 
 To upper left indicates the folder for the files for the project. All resides
 on my computer.
@@ -98,26 +97,26 @@ case. It's a devicefile cu.usbmodem14201.
 
 
 
-## Flash Micropython to Raspberry Pico W
 
+My host operation system is MacOs/Unix.
 
-
-I have tried different type of Integrated Development Environment, IDE, like Pycharm, VScode and Thonny.
+I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
 Thonny worked best when it comes to loading the target, i.e. Pico W, so I picked Thonny. The other
-have better advantages when comes to supporting python.
+two have better supports when comes to programming python.
 
-When connecting the Pico the first time it shows up as a USB device if the push-button is actived.
+#### Flash Micropython to Raspberry Pico W
+
+When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot+.
 To be able to load an application code the Pico W need firmware. This is easily achived by downloading
-firmware from this site and that drag and drop it the the RP2 device. The firmware will be loaded
-and when finished, rebooted by itself.
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ )and that drag and drop
+it to the the RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
-I use a MacOS as operating system
+#### Overview over Thonny
 
-
-First view of the Thoony IDE. Marked in a blue rectangle, the root folder of the project
+First view of the Thony IDE. Marked in a blue rectangle, the root folder of the project
 and the source code. Marked in red rectangle the files on the target, i.e. the Pico W. Marked in green rectangle
 shows that the IDE have contact with the target. As seen it shows up as a device file. (everything is
-a file in unix :-)).  Marked in black rectangle, possible to copy files from your computer 
+a file in unix :-)). Marked in black rectangle, possible to upload folder/files from your computer 
 to the target.
 
 ![Tux, the Linux mascot](./images/thonny_base.png)
@@ -134,7 +133,6 @@ select main.py and push **OK** button
 
 
 
-
 # Circuit diagram (can be hand drawn)
 -Electrical calculations
 
@@ -148,22 +146,24 @@ Pins used:
 | Ground | 38               | GND|
 | DHT 11 No1 | 32  | GPIO27|
 | DHT 11 No2 | 31   |GPIO26|
+| DHT 11 No2 | 29   |GPIO22|
 | LoRa modem TX | 1   |UART0 TX |
 | LoRa modem | 2  |UART0 RX  |
 
 
 # Platform
-Describe your choice of platform. If you have tried different platforms it can be good to provide a 
-comparison.
-
-Is your platform based on a local installation or a cloud? Do you plan to use a paid subscription or
-a free? Describe the different alternatives on going forward if you want to scale your idea.
 
 I choosen DataCake since it's easy and not to much work to get it going. With the measurement I 
-have I think it's a good fit.
+have I think it's a good fit. Apart from settning up the acount on DataCake need to configure
+how the data that arrives should be decoded, see below and how it should be presented in   Dashboard.
+
+DataCake is free for small amount of data.
+
+DataCake generates a serial number that the application program in target should use so DataCake
+will be able to identify from where the data is coming.
 
 
- ![Tux, the Linux mascot](./images/datacake.png)
+![Tux, the Linux mascot](./images/datacake.png)
 
 
 Decoder code in DataLake, written i javscript ....
@@ -197,6 +197,7 @@ function Decoder(request) {
 }
 ```
 
+![ff](./images/datacake_later.png)
 
 # The code
 
@@ -249,9 +250,6 @@ class TempHum:
     def __init__(self, gpio_pin: int) -> None:
         self.sensor = dht.DHT11(Pin(gpio_pin))
 
-    # The DHT11 can be called no more than once per second and the DHT22 once every two
-    # seconds for most accurate results. Sensor accuracy will degrade over time. Each sensor supports a different operating range. Refer to the product datasheets for specifics.
-
     def read_sensor(self) -> tuple[int, int]:
         try:
             self.sensor.measure()
@@ -260,39 +258,67 @@ class TempHum:
         except Exception as err:
             raise TempHumError(f'Error, failed to read sensors! {err}')
 
+        # The DHT11 can be called no more than once per second.
+        # Avoid any complications delay it here.
+        time.sleep(1)
+
         return temp, hum
 ```
 
 #### Calculating mean value
 
 The function *get_mean_values()* calculates mean values and can handle a list of
-sensor objects. Values outside a range will be discarded.
+sensor objects. Values outside a range will be discarded. This application uses
+3 DHT11 and select two of them, i.e. the ones closest in measurement and than
+build a mean value for temperature and humidity.
 
 ```python
-def get_mean_values(sensors: list) -> tuple[int, int]:
-    def calculate_mean(arr: list):
+def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
+
+    def closest_pair(values: list) -> tuple:
+        # Calculate the absolute differences between each pair
+        ab_diff = abs(values[0] - values[1])
+        ac_diff = abs(values[0] - values[2])
+        bc_diff = abs(values[1] - values[2])
+
+        # Determine the pair with the smallest difference
+        if ab_diff <= ac_diff and ab_diff <= bc_diff:
+            return values[0], values[1]
+        if ac_diff <= ab_diff and ac_diff <= bc_diff:
+            return values[0], values[2]
+
+        return values[1], values[2]
+
+    def calculate_mean(arr: tuple) -> float:
         return sum(arr) / len(arr)
 
-    valid_temps = []
-    valid_hums = []
+    temps = []
+    hums = []
 
     for sensor in sensors:
         temp, hum = sensor.read_sensor()
         if 0 <= temp <= 50:
-            valid_temps.append(temp)
+            temps.append(temp)
         if 0 <= hum <= 100:
-            valid_hums.append(hum)
+            hums.append(hum)
+
+    print(f"temps: {temps}")
+    print(f"hums: {hums}")
+
+    valid_temps = closest_pair(temps)
+    valid_hums = closest_pair(hums)
 
     temp, hum = calculate_mean(valid_temps), calculate_mean(valid_hums)
 
-    return temp, hum    
+    return temp, hum
+   
 
 ```
 
 
 #### Post values
 
-Posts values from sensors to DataCake. An exception will be raised in case of failure, bad reply from DataCake.
+Post values from sensors to DataCake. An exception will be raised in case of failure, bad reply from DataCake.
 
 ```python
 def post_values(temp: int, hum: int) -> None:
@@ -302,10 +328,13 @@ def post_values(temp: int, hum: int) -> None:
         "humidity": hum}
     json_payload = json.dumps(payload)
 
-    response = urequests.post(DATACAKE_URL, data=json_payload)
-    if response.status_code != HTTPStatus.OK:
-        raise DataCakeError(f"Error, failed to post data! {response.status_code}")
+    try:
+        response = urequests.post(DATACAKE_URL, data=json_payload)
+    except OSError as err:
+        raise DataCakeError(f"Error, failed to post DataCake: {err}")
 
+    if response.status_code != HTTP_STATUS_OK:
+        raise DataCakeError(f"Error, failed to post data! {response.status_code}")
 ```
 
 problems with posting
@@ -348,69 +377,60 @@ The program can be divided int two parts:
    should deal more on behaviour.
    
 ```python
-import sys
-from time import sleep
-
-from http_requests import post_values, DataCakeError
-from keys import WIFI_SSID, WIFI_PASS, DEV_EUI, APP_EUI, APP_KEY
-from lora import LoRa
-from temphum import TempHum, get_mean_values
-from wifi import Wifi
-
-SLEEP_INTERVAL = 10
-GPIO_27 = 27
-
-def debug_print(text: str, debug=True):
-    if debug:
-        print(text)
-
-
 def main():
-    sensors = [TempHum(gpio_pin=GPIO_27),
-               TempHum(gpio_pin=GPIO_27)
+    sensors = [TempHum(gpio_pin=26),
+               TempHum(gpio_pin=27),
+               TempHum(gpio_pin=22)
                ]
+
     wifi = Wifi(ssid=WIFI_SSID, password=WIFI_PASS)
-
-    lora = LoRa()
-    lora.setup_lora(dev_eui=DEV_EUI, app_eui=APP_EUI, app_key=APP_KEY)
-
     try:
         wifi.connect()
-    except TimeoutError as err:
-        print(f"{err}")
+    except WifiTimeout as err:
+        print(f"Error {err}")
+
+    monitor_wifi = MonitorWifi(wifi=wifi)
+    Timer(period=5000, mode=Timer.PERIODIC, callback=lambda t: monitor_wifi())
+
+    lora = LoRa()
+    try:
+        lora.setup_lora(dev_eui=DEV_EUI, app_eui=APP_EUI, app_key=APP_KEY)
+    except LoRaTimeout as err:
+        print(f"Error, timeout on LoRa: {err}")
 
     while True:
         try:
             temp, hum = get_mean_values(sensors)
             debug_print(f"Temperature: {temp} C Humidity: {hum} %")
-            if not wifi.connected():
-                raise ConnectionDroppedError('Error, connection dropped')
 
             post_values(temp=temp, hum=hum)
-            lora.send_over_lora(temp= temp, hum=hum )
 
-            sleep(SLEEP_INTERVAL)
+            lora.send_over_lora(temp=temp, hum=hum)
 
-        except OSError as err:
-            print(f"Problems with sensors? {err}")
+            
+
+        except TempHumError as err:
+            print(f"Error, {err}")
 
         except ConnectionDroppedError as err:
-            print(err)
+            print(f"Error, connection dropped {err}")
 
         except DataCakeError as err:
-            print(f"Failed to post{err}")
+            print(f"Error, failed to post{err}")
 
         except KeyboardInterrupt as err:
-            print(f'Exiting...{err}')
+            print(f"User interrupted, exiting...")
             return 42
 
+        sleep(SLEEP_INTERVAL)
 
 if __name__ == "__main__":
     sys.exit(main())
 
+
 ```
 The rest of the source code is provided in in this repo. Please check these of  setup of Wifi and LoRa and code.
-The code as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
+The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
 
 
 # Finalizing the design
@@ -448,7 +468,7 @@ This did never happened. I enabled loggning the modem, and suddenly it started t
  ![Tux, the Linux mascot](./images/lora_overview.png)
 
 ```python=
-def check_join_status(self):
+   def _check_join_status(self):
         restr = ""
         self._write_cmd("AT+CSTATUS?\r\n")
         restr = self._get_response()
@@ -501,31 +521,12 @@ Sent message: ff7201a9
 ```
 
 
-
-
-
-
-
 [^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
 
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
 
 
-#TODOs
-
-I exprienced not that high accurary on the DHT, for that reason I did mount 3 DHT
-and make a comparision and picked to 2 best ones for a mean value :-)
 
 
-Sometimes I get a OSerror when posting data to DataCake!! why put in safety net!!
-
-
-
-temps: [25, 26, 26]
-hums: [51, 48, 56]
-Temperature: 26.0 C Humidity: 26.0 %
-temps: [25, 26, 26]
-hums: [51, 48, 56]
-Temperature: 26.0 C Humidity: 26.0 %
 
