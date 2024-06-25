@@ -1,8 +1,8 @@
-<img src="./images/logo.png" alt="drawing" width="20"/> ***Fredrik Svärd - fs223sq*** 
+<img src="./images/logo.png" alt="drawing" width="20"/> **Fredrik Svärd - fs223sq** 
 
 # Overview
 
-The project introduces a solution to read humidity and temperature using a DHT11 sensors, Raspberry Pi Pico W, and
+The project introduces a solution to read humidity and temperature using  DHT11 sensors, Raspberry Pi Pico W, and
 forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.
 
 This project was part of the course ***23ST-1DT305 Introduction to Applied IoT 2024*** at Linnaeus University,
@@ -20,25 +20,26 @@ close to Brommaplan in Stockholm Sweden.
 
 My plan was to use LoRa with either Helium or TTN as provider. It turns out that none of these providers
 have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
-in this area and if that doesnt work go for WIFI
+in this area and if that don't work go for WIFI
 
-The purpose with application was to monitor  temperature and humidity and see if the temperature
-changes over time and and there is temperatures at the level of Frost.This typically happens during
+The purpose with the application was to monitor  temperature and humidity and see if the temperature
+changes over time and and there is temperatures at the level of **Frost**.This typically occurs during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
 
 # List of Materials
 
-| Unit | price SEK including VAT|
-| ----------- | ----------- |
-| Solderless Breadboard 840 tie-points | 69  |
-|USB cable A-male - microB-male| 39 | 
-| Raspberry Pi Pico WH | 109  |
-| 3 Digital temperature and humidity sensor DHT11 | 3 * 49   |
-| 4.7 kohm resistor | 1  |
-| M5Stack LoRa module ASR6501 868MHz including antenna | 330  |
-| Jumper wires 40-pin 30cm male/male | 49   |
-| Lab cord Grove - 0.64mm sockets 4-pol 200mm| 14.5 |
+| Unit                                                | price SEK including VAT |
+|-----------------------------------------------------|-------------------------|
+| Solderless Breadboard 840 tie-points                | 69                      |
+| USB cable A-male - microB-male                      | 39                      | 
+| Raspberry Pi Pico WH                                | 109                     |
+| 3 Digital temperature and humidity sensor DHT11     | 3 * 49                  |
+| 4.7 kohm resistor                                   | 1                       |
+| M5Stack LoRa module ASR6501 868MHz including antenna | 330                     |
+| Jumper wires 40-pin 30cm male/male                  | 49                      |
+| Lab cord Grove - 0.64mm sockets 4-pol 200mm         | 14.5                    |
+| ∑                                                  | 758.5                   |
 
 All equipment purchased from Electrokit.
 
@@ -58,17 +59,17 @@ one without. The one without needed a external resistor 4.7 kohm.
 I noticed early that the accuracy of the DHT11 was not than good, so I decided to  do budget Triple Modular Redundancy (TMR).
 Out of three always pick 2 ones closest to each other in temperature and humidity.
 
-Figure 2 shows the one mounted on a board including a resistor.
+
 
 <img src="./images/dht11_wiring.jpeg" alt="drawing" width="100"/>
+
+
+Figure 2a shows the one mounted on a board including a resistor.
 
 <img src="./images/dht11_without.png" alt="drawing" width="100"/>
 
 
-Fig 2.
-
-
-
+Figure 2b shows the DHT11 without board.
 
 
 LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MHz frequency range. 
@@ -85,15 +86,15 @@ Fig 3
 My host operation system is MacOs/Unix.
 
 I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
-Thonny worked best when it comes to loading and commence exuction on the target, i.e. Pico W, so I picked Thonny. The other
+Thonny worked best when it comes to loading and commence execution on the target, i.e. Pico W, so I picked Thonny. The other
 two have better supports when comes to programming python, but since project i small it works well with Thonny.
 
 #### Flash Micropython to Raspberry Pico W
 
 When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
 To be able to load an application code the Pico W needs firmware. This is easily achived by downloading
-firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ )and that drag and drop to dowloaded
-fil to the the RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and that drag and drop to dowloaded
+file to the  RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
 #### Overview, Thonny
 
