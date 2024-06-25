@@ -525,16 +525,6 @@ Sent message: ff7201a9
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
 
 
-# Definitions
-
-LoRa - Long Range ....
-
-Helium -
-
-TTN
-
-WiFi
-
 
 
 
