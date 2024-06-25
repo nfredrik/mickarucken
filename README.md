@@ -1,4 +1,4 @@
-<img src="./images/logo.png" alt="drawing" width="20"/> **Fredrik Svärd - fs223sq** 
+<img src="./images/logo.png" alt="drawing" width="20"/> ***Fredrik Svärd - fs223sq*** 
 
 # Overview
 
@@ -22,8 +22,8 @@ My plan was to use LoRa with either Helium or TTN as provider. It turns out that
 have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
 in this area and if that don't work go for WIFI
 
-The purpose with the application was to monitor  temperature and humidity and see if the temperature
-changes over time and and there is temperatures at the level of **Frost**.This typically occurs during
+The purpose with application was to monitor  temperature and humidity and see if the temperature
+changes over time and and there is temperatures at the level of Frost.This typically happens during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
 
@@ -52,11 +52,11 @@ The device has many digital and analog input and outputs and is well suited for 
 
 Fig 1.
 
-The DHT11 is a multipurpose device that could provide information about temperature and humudity.
-It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. Two with boards
+The DHT11 is a multipurpose device that can provide information about temperature and humudity.
+It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. Two with boards and
 one without. The one without needed a external resistor 4.7 kohm.
 
-I noticed early that the accuracy of the DHT11 was not than good, so I decided to  do budget Triple Modular Redundancy (TMR).
+I noticed early that the accuracy of the DHT11 was not than good, so I decided to do budget Triple Modular Redundancy (TMR).
 Out of three always pick 2 ones closest to each other in temperature and humidity.
 
 
@@ -87,7 +87,7 @@ My host operation system is MacOs/Unix.
 
 I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
 Thonny worked best when it comes to loading and commence execution on the target, i.e. Pico W, so I picked Thonny. The other
-two have better supports when comes to programming python, but since project i small it works well with Thonny.
+two have better support when comes to programming python, but since project is small it works well with Thonny.
 
 #### Flash Micropython to Raspberry Pico W
 
@@ -137,7 +137,9 @@ Pins used:
 | LoRa modem TX | 1   |UART0 TX |
 | LoRa modem | 2  |UART0 RX  |
 
-All devices are connected to the power supply provided by Pico W.
+All devices are connected to the power supply provided by Pico W. This means that the Ground (pin38)
+and VCC (3V) will be connected to  columns minus (-) and plus (+) on the bread board and all devices connects
+to this columns.
 
 One of the DHT11 do not have a board, so there was a need of a externnal resistor
 4.7 kohm as pull resistor to power supply, see figure 4
@@ -241,8 +243,8 @@ to find files for import. The main file resides under the project root.
 #### Reading temperature and humidity
 
 The core functionality for reading temperature and humidity is implemented in  a class **TempHum**. The
-implementation makes it possible create several objects but different logical pin anmes. Nota Bene: The DHT11 can be called no more than once per second.
-In case of reading error a exception will be raised. The caller needs to take care of the exception.
+implementation makes it possible create several objects but different logical pin names. Nota Bene: The DHT11 can be called no more than once per second.
+In case of reading error an exception will be raised. The caller needs to take care of the exception.
 
 ```python
 
@@ -335,8 +337,8 @@ def post_values(temp: int, hum: int) -> None:
         raise DataCakeError(f"Error, failed to post data! {response.status_code}")
 ```
 
-I have observed that sometimes there is a problem with posting due memory problem (ENOMEM). I that
-moment I don't know the root cause of this problem.
+I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). I the
+moment I don't know the root cause of this problem. It still works if I catch the neglect the error.
 
 ```commandline
 Temperature: 25.5 C Humidity: 32.5 %
@@ -432,7 +434,9 @@ have been done in an other way, or even better? Pictures are nice!
 The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
 Stockholm. I should have spent more time on investigate more about coverage. I'm a bit dispointed since the
 coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
-solution.  If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
+solution.  
+
+If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
 included in any of the starter kits that I bought. I should have spent more time on tools for visualsation too.
 
 
@@ -441,22 +445,22 @@ included in any of the starter kits that I bought. I should have spent more time
 # Transmitting the data / connectivity
 
 My primary goal was to have an application using LoRa, so that was my first attempt. I started to connect
-the LoRa module and and the provided example code from the common github repo provided på LNU. I tried
+the LoRa module and and the provided example code from the common github repo provided from LNU. I tried
 a number of combination and altered the code bit by bit. I moved the application and equipment to
 the roof of our buildning. 
 
 The python code for LoRA sends a number of **AT-commands** to the module. At a point it starts to
 initiate a join() to the network and than use the **AT-command CSTATUS** 
 
- ![Tux, the Linux mascot](./images/cstatus.png)
-
-
-In the end of the setup of the modem there is a status check checking the
+Here starts the problem. In the end of the setup of the modem there is a status check checking the
 modem have connected to the network. Often I got halfway, saying: **There is data sent and success**, status code for this 
 is **03** but the status,check_join_status() se below,  expects **There is data sent and success, there is download too.**
-equal to status code **08**
-This did never happened. I enabled loggning the modem, and suddenly it started to work....
+equal to status code **08** This did never happened. 
 
+I enabled loggning the modem, and suddenly it started to work sporadically
+
+
+ ![Tux, the Linux mascot](./images/cstatus.png)
 
  ![Tux, the Linux mascot](./images/lora_overview.png)
 
@@ -470,7 +474,8 @@ This did never happened. I enabled loggning the modem, and suddenly it started t
 
         return False
 ```
-Note the credentials are fake values
+
+A stdout log looks like this when debuggning is enabled.  Note the credentials are fake values.
 ```commandline
 >>> %Run -c $EDITOR_CONTENT
 
@@ -496,7 +501,7 @@ b'AT+CSTATUS?\r\n'b'\r\n'b'+CSTATUS:03\r\n'b'OK\r\n'
 Joining....
 ```
 
-Climbed to the roof and enabled logging by the modem
+When I  climbed to the roof and enabled logging by the modem, it worked sporadicly.
 
 
 ```commandline
