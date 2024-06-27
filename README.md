@@ -8,14 +8,14 @@ forward the data with the help of Wi-Fi and/or LoRa, and later visualize the inf
 This project was part of the course ***23ST-1DT305 Introduction to Applied IoT 2024*** at Linnaeus University,
 Kalmar Sweden.
 
-All information, images, and code shared in this report are under a MIT license.
+All information, images, and code shared in this report are under a [MIT license](https://mit-license.org/).
 
 This project can be completed in a few hours as long as you have all 
 the prerequisite harddware and software setup.
 
 # Objective
 
-I choosen to build an application that could report humidity and temperature from garden community 
+I have chosen to build an application that could report humidity and temperature from garden community 
 close to Brommaplan in Stockholm Sweden.
 
 My plan was to use LoRa with either Helium or TTN as provider. It turns out that none of these providers
@@ -52,7 +52,7 @@ The device has many digital and analog input and outputs and is well suited for 
 
 Fig 1.
 
-The DHT11 is a multipurpose device that can provide information about temperature and humudity.
+The DHT11 is a multipurpose device that can provide information about temperature and humidity.
 It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. 2 with boards and
 1 without. The one without needed a external resistor, 4.7 kohm.
 
@@ -92,7 +92,7 @@ two have better support when comes to programming python, but since project is s
 #### Flash Micropython to Raspberry Pico W
 
 When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
-To be able to load an application code the Pico W needs firmware. This is easily achived by downloading
+To be able to load an application code the Pico W needs firmware. This is easily achieved by downloading
 firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to dowloaded
 file to the  RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
@@ -157,7 +157,7 @@ Fig 4.
 
 # Platform
 
-I choosen DataCake since it's easy and not to much work to get it going. With the measurement I 
+I chosen DataCake since it's easy and not to much work to get it going. With the measurement I 
 have I think it's a good fit. Apart from setting up the acount on DataCake need to configure
 how the data that arrives should be decoded, see below and how it should be presented in   Dashboard.
 
@@ -200,7 +200,7 @@ function Decoder(request) {
 ```
 
 
-Charts for temperature and humudity presented in DataCake on a weekly basis.
+Charts for temperature and humidity presented in DataCake on a weekly basis.
 
 
 ![ff](./images/datacake_later.png)
@@ -356,6 +356,7 @@ Temperature: 25.5 C Humidity: 32.5 %
 Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
 Temperature: 25.5 C Humidity: 32.5 %
 
+ENOMEM is known error code. A thorough explanation can be found here: [error codes] (https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
 ```
 
 ### main 
@@ -435,7 +436,7 @@ The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https
 
 
 The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
-Stockholm. I should have spent more time on investigate more about coverage. I'm a bit dispointed since the
+Stockholm. I should have spent more time on investigate more about coverage. I'm a bit disapointed since the
 coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
 solution.  
 
@@ -464,7 +465,7 @@ equal to status code **08** This happened occasionally.
         restr = self._get_response()
         if "+CSTATUS:" in restr and "08" in restr:
             return True
-
+f
         return False
 ```
 
@@ -478,8 +479,7 @@ A functional view of the module and the connected MCU, that is Pico W.
  ![Tux, the Linux mascot](./images/lora_overview.png)
 
 ```python
-
-   def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
+def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
 
         self.configure(dev_eui, app_eui, app_key)
 
@@ -541,10 +541,16 @@ b'AT+DTRX=1,1,8,ff7201a9\r\n'b'\r\n'b'ERR+SEND:00\r\n'
 Sent message: ff7201a9
 ```
 
-**Conclusion:** I did abandon the LoRa solution since was not stable enough.
+**Conclusion:** I did abandon the LoRa solution since was not stable enough and WiFi solution worked well.
 
 [^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
+
+
+# Future Work and Enhancements
+
+If the LoRa network expands an cover the garden community near Brommaplan it will be nice to implement a application using LoRa
+to report on conditions in the garden. Alternatively would be to implement LTE solution.
 
 https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
 
