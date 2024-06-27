@@ -53,8 +53,8 @@ The device has many digital and analog input and outputs and is well suited for 
 Fig 1.
 
 The DHT11 is a multipurpose device that can provide information about temperature and humudity.
-It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. Two with boards and
-one without. The one without needed a external resistor 4.7 kohm.
+It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. 2 with boards and
+1 without. The one without needed a external resistor, 4.7 kohm.
 
 I noticed early that the accuracy of the DHT11 was not than good, so I decided to do budget Triple Modular Redundancy (TMR).
 Out of three always pick 2 ones closest to each other in temperature and humidity.
@@ -78,7 +78,7 @@ can be controlled using the AT command set. Fig 3.
 
 <img src="./images/lora_modem.png" alt="drawing" width="200"/>
 
-Fig 3
+Fig 3.
 
 
 # Computer setup
@@ -93,7 +93,7 @@ two have better support when comes to programming python, but since project is s
 
 When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
 To be able to load an application code the Pico W needs firmware. This is easily achived by downloading
-firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and that drag and drop to dowloaded
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to dowloaded
 file to the  RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
 #### Overview, Thonny
@@ -110,18 +110,19 @@ to the target.
 When trying to open a folder the IDE prompts with a choice to either open files on your computer
 or on the target.
 
-![Tux, the Linux mascot](./images/foldern.png)
+
+<img src="./images/foldern.png" alt="drawing" width="200"/>
+
 
 When chosen RP2040 device there a new window to select files to execute. In this case
 select main.py and push **OK** button
 
-![Tux, the Linux mascot](./images/run_target.png)
+<img src="./images/run_target.png" alt="drawing" width="500"/>
 
 Next step is to commence execution by pushing the green button, marked in red.
 
 
 # Circuit diagram (can be hand drawn)
--Electrical calculations
 
  ![Tux, the Linux mascot](./images/pico_w_layout.png)
 
