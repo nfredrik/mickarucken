@@ -150,8 +150,8 @@ One of the DHT11 do not have a board, so there was a need of a externnal resisto
 Fig 4.
 
 
+<img src="./images/ny_skiss.jpg" alt="drawing" width="700"/>
 
- ![Tux, the Linux mascot](./images/skiss.jpeg)
 
 
 
@@ -433,6 +433,7 @@ The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https
 
 
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
+
 
 
 The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
