@@ -124,7 +124,7 @@ select main.py and push **OK** button
 
 # Circuit diagram
 
-<img src="./images/ny_skiss.jpg" alt="drawing" width="700"/>
+<img src="./images/ny_skiss.jpg" alt="drawing" width="500"/>
 
 
 
