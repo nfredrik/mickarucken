@@ -26,20 +26,20 @@ class TempHum:
 
 
 def get_mean_values(sensors: list[int]) -> tuple[float, float]:
-
     def closest_pair(values: list) -> tuple:
+        a, b, c = values[0], values[1], values[2]
         # Calculate the absolute differences between each pair
-        ab_diff = abs(values[0] - values[1])
-        ac_diff = abs(values[0] - values[2])
-        bc_diff = abs(values[1] - values[2])
+        ab_diff = abs(a - b)
+        ac_diff = abs(a - c)
+        bc_diff = abs(b - c)
 
         # Determine the pair with the smallest difference
         if ab_diff <= ac_diff and ab_diff <= bc_diff:
-            return values[0], values[1]
+            return a, b
         if ac_diff <= ab_diff and ac_diff <= bc_diff:
-            return values[0], values[2]
+            return a, c
 
-        return values[1], values[2]
+        return b, c
 
     def calculate_mean(arr: tuple) -> float:
         return sum(arr) / len(arr)

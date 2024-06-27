@@ -8,19 +8,19 @@ forward the data with the help of Wi-Fi and/or LoRa, and later visualize the inf
 This project was part of the course ***23ST-1DT305 Introduction to Applied IoT 2024*** at Linnaeus University,
 Kalmar Sweden.
 
-All information, images, and code shared in this report are under a [MIT license](https://mit-license.org/).
+All information, images, and code shared in this report are under  [MIT license](https://mit-license.org/).
 
 This project can be completed in a few hours as long as you have all 
-the prerequisite harddware and software setup.
+the prerequisite hardware and software setup.
 
 # Objective
 
 I have chosen to build an application that could report humidity and temperature from garden community 
 close to Brommaplan in Stockholm Sweden.
 
-My plan was to use LoRa with either Helium or TTN as provider. It turns out that none of these providers
+My plan was to use LoRa with either Helium or TTN (networks of IoT) as provider. It turns out that none of these providers
 have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
-in this area and if that don't work go for WiFi
+in this area and if that don't work go for WiFi.
 
 The purpose with the application was to monitor  temperature and humidity and see if the temperature
 changes over time and and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
@@ -29,17 +29,18 @@ freezes on surfaces like grass, car windows, and roofs.
 
 # List of Materials
 
-| Unit                                                | price SEK including VAT |
-|-----------------------------------------------------|-------------------------|
-| Solderless Breadboard 840 tie-points                | 69                      |
-| USB cable A-male - microB-male                      | 39                      | 
-| Raspberry Pi Pico WH                                | 109                     |
-| 3 Digital temperature and humidity sensor DHT11     | 3 * 49                  |
-| 4.7 kohm resistor                                   | 1                       |
-| M5Stack LoRa module ASR6501 868MHz including antenna | 330                     |
-| Jumper wires 40-pin 30cm male/male                  | 49                      |
-| Lab cord Grove - 0.64mm sockets 4-pol 200mm         | 14.5                    |
-| ∑                                                  | 758.5                   |
+| Unit                                                       | price SEK including VAT |
+|------------------------------------------------------------|---------------------|
+| Solderless Breadboard 840 tie-points                       | 69                  |
+| USB cable A-male - microB-male                             | 39                  | 
+| Raspberry Pi Pico WH                                       | 109                 |
+| 2 Digital temperature and humidity sensor DHT11 with board | 2 * 49              |
+| 1 Digital temperature and humidity sensor DHT11 without board  | 49                  |
+| 4.7 kohm resistor                                          | 1                   |
+| M5Stack LoRa module ASR6501 868MHz including antenna       | 330                 |
+| Jumper wires 40-pin 30cm male/male                         | 49                  |
+| Lab cord Grove - 0.64mm sockets 4-pol 200mm                | 14.5                |
+| ∑                                                          | 758.5               |
 
 All equipment purchased from Electrokit.
 
@@ -56,7 +57,7 @@ The DHT11 is a multipurpose device that can provide information about temperatur
 It's mounted at a board that a includes a pull-up resistor. I have used 3 DHT11s. 2 with boards and
 1 without. The one without needed a external resistor, 4.7 kohm.
 
-I noticed early that the accuracy of the DHT11 was not than good, so I decided to do budget Triple Modular Redundancy (TMR).
+I noticed early that the accuracy of the DHT11 was not than good, so I decided to do a simple triple modular redundancy solution.
 Out of three always pick 2 ones closest to each other in temperature and humidity.
 
 
@@ -87,7 +88,7 @@ Fig 3.
 My host operation system is MacOs/Unix.
 
 I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
-Thonny worked best when it comes to loading and commence execution on the target, i.e. Pico W, so I picked Thonny. The other
+Thonny worked best when it comes to detect, load files and commence execution on the target, i.e. Pico W, so I picked Thonny. The other
 two have better support when comes to programming python, but since project is small it works well with Thonny.
 
 #### Flash Micropython to Raspberry Pico W
@@ -95,7 +96,7 @@ two have better support when comes to programming python, but since project is s
 When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
 To be able to load application code the Pico W needs firmware. This is easily achieved by downloading
 firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to the dowloaded
-file to the  RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
+file to the  RP2 device. The firmware will be loaded and when finished, rebooted by itself.
 
 #### Overview, Thonny
 
@@ -147,7 +148,7 @@ All devices are connected to the power supply provided by Pico W. This means tha
 and VCC (3V) will be connected to  columns minus (-) and plus (+) on the breadboard and all devices connects
 to these columns.
 
-One of the DHT11 do not have a board, so there was a need of a externnal resistor
+One of the DHT11 do not have a board, so there was a need of a external resistor
 4.7 kohm as pull resistor to power supply, see figure 4
 
 ![](./images/dht_koppling.png)
@@ -157,9 +158,9 @@ Fig 4.
 
 # Platform
 
-I have chosen DataCake since it's easy and not to much work to get it going. With the measurement I 
-have I think it's a good fit. Apart from setting up the acount on DataCake need to configure
-how the data that arrives should be decoded, see below and how it should be presented in   Dashboard.
+I have chosen DataCake since it's easy and not to much work to get it going. With the measurement I think 
+it's a good fit. Apart from setting up the acount on DataCake we need to configure
+how the data that arrives should be decoded, see below and how it should be presented in a Dashboard.
 
 DataCake is free for small amount of data.
 
@@ -168,7 +169,7 @@ At configuration of DataCake, a serial number will be generated
 will be able to identify the source of the data .
 
 
-Decoder code in DataLake, written i javscript ....
+Decoder code in DataLake, written i javscript.
 
 ```python=
 function Decoder(request) {
@@ -268,10 +269,12 @@ class TempHum:
 
 #### Calculating mean value
 
-The function **get_mean_values()** calculates mean values and can handle a list of
-sensor objects. Values outside a range will be discarded. This application uses
+The function **get_mean_values()** calculates mean values and can handle a list of integers. 
+Values outside a range will be discarded. This application uses
 3 DHT11 and select two of them, i.e. the ones closest in measurement and than
 build a mean value for temperature and humidity.
+
+Function in the scope of **get_mean_values()**.
 
 **closest_pair** Calculates the pair closest and return that pair.
 
@@ -279,20 +282,20 @@ build a mean value for temperature and humidity.
 
 ```python
 def get_mean_values(sensors: list[int]) -> tuple[float, float]:
-
-    def closest_pair(values: list[int]) -> tuple:
+    def closest_pair(values: list) -> tuple:
+        a, b, c = values[0], values[1], values[2]
         # Calculate the absolute differences between each pair
-        ab_diff = abs(values[0] - values[1])
-        ac_diff = abs(values[0] - values[2])
-        bc_diff = abs(values[1] - values[2])
+        ab_diff = abs(a - b)
+        ac_diff = abs(a - c)
+        bc_diff = abs(b - c)
 
         # Determine the pair with the smallest difference
         if ab_diff <= ac_diff and ab_diff <= bc_diff:
-            return values[0], values[1]
+            return a, b
         if ac_diff <= ab_diff and ac_diff <= bc_diff:
-            return values[0], values[2]
+            return a, c
 
-        return values[1], values[2]
+        return b, c
 
     def calculate_mean(arr: tuple) -> float:
         return sum(arr) / len(arr)
@@ -313,8 +316,6 @@ def get_mean_values(sensors: list[int]) -> tuple[float, float]:
     temp, hum = calculate_mean(valid_temps), calculate_mean(valid_hums)
 
     return temp, hum
-   
-
 ```
 
 
@@ -341,7 +342,7 @@ def post_values(temp: int, hum: int) -> None:
 ```
 
 I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). At the
-moment I don't know the root cause of this problem. It still works if I catch and the neglect the error.
+moment I don't know the root cause of this problem. It still works if the **main()**-function catches and the neglect the error.
 
 ```commandline
 Temperature: 25.5 C Humidity: 32.5 %
@@ -368,6 +369,8 @@ The program can be divided int two parts:
  - Eternal loop phase where sensors are read and posted to DataCake or some similar systems. The intention
    is that **main()** have less knowledge of details, this promotes readability and makes it easy to move
    from a LoRa solution to a Wifi and vice versa.
+
+ - **main()** will continue if LoRa setup fails/timeouts and only use WiFi solution. The send_over_lora() method will return immediately when called.
    
 ```python
 def main():
@@ -449,7 +452,7 @@ the roof of our buildning.
 The python code for LoRA sends a number of **AT-commands** to the module. At a point it starts to
 initiate a join() to the network and than use the **AT-command CSTATUS** -> Inquire Device Current Status. 
 
-Here starts the problem. Often I got halfway, saying: **There is data sent and success**, status code for this 
+Here starts the problem. Often it got halfway, saying: **There is data sent and success**, status code for this 
 is **03** but the status,check_join_status() se below, expects **There is data sent and success, there is download too.**
 equal to status code **08** This happened occasionally. 
 
@@ -473,6 +476,9 @@ I enabled loggning the modem, and suddenly it started to work little better, but
 A functional view of the module and the connected MCU, that is Pico W.
 
  ![Tux, the Linux mascot](./images/lora_overview.png)
+
+
+setup_lora(). Polls for positive status from check_status() or it reaches timout and raises an exception. 
 
 ```python
 def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
