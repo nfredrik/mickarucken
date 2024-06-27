@@ -121,9 +121,15 @@ select main.py and push **OK** button
 <img src="./images/run_target.png" alt="drawing" width="500"/>
 
 
-# Circuit diagram (can be hand drawn)
+# Circuit diagram
 
- ![Tux, the Linux mascot](./images/pico_w_layout.png)
+<img src="./images/ny_skiss.jpg" alt="drawing" width="700"/>
+
+
+
+
+ 
+![Tux, the Linux mascot](./images/pico_w_layout.png)
 
 Pins used:
 
@@ -147,11 +153,6 @@ One of the DHT11 do not have a board, so there was a need of a externnal resisto
 ![](./images/dht_koppling.png)
 
 Fig 4.
-
-
-<img src="./images/ny_skiss.jpg" alt="drawing" width="700"/>
-
-
 
 
 # Platform
