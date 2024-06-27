@@ -544,6 +544,8 @@ Sent message: ff7201a9
 
 **Conclusion:** I did abandon the LoRa solution since was not stable enough and WiFi solution worked well.
 
+[Video on setup](https://youtube.com/shorts/qDCdxx_hHoM)
+
 [^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
 
