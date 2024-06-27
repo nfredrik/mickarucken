@@ -139,15 +139,15 @@ Pins used:
 | LoRa modem | 2  |UART0 RX  |
 
 All devices are connected to the power supply provided by Pico W. This means that the Ground (pin38)
-and VCC (3V) will be connected to  columns minus (-) and plus (+) on the bread board and all devices connects
-to this columns.
+and VCC (3V) will be connected to  columns minus (-) and plus (+) on the breadboard and all devices connects
+to these columns.
 
 One of the DHT11 do not have a board, so there was a need of a externnal resistor
 4.7 kohm as pull resistor to power supply, see figure 4
 
 ![](./images/dht_koppling.png)
 
-fig 4.
+Fig 4.
 
 
 
@@ -163,15 +163,14 @@ how the data that arrives should be decoded, see below and how it should be pres
 
 DataCake is free for small amount of data.
 
-DataCake generates a serial number that the application program in target should use so DataCake
-will be able to identify from where the data is coming.
-
-
+At configuration of DataCake, a serial number will be generated
+ that the application program in target should use so DataCake
+will be able to identify the source of the data .
 
 
 Decoder code in DataLake, written i javscript ....
 
-```javascript=
+```python=
 function Decoder(request) {
   
     // First, parse the request body into a JSON object to process it
@@ -200,6 +199,10 @@ function Decoder(request) {
 }
 ```
 
+
+Charts for temperature and humudity presented in DataCake on a weekly basis.
+
+
 ![ff](./images/datacake_later.png)
 
 # The code
@@ -209,17 +212,17 @@ The file structure of the project it's simple. There is a **main()**-function an
 provides functionality to support the **main** function.
 
 
-| Functionality | File |
-| ----------- | ----------- |
-| Main program, setup and endless loop | main.py |
-| Read temperature and humidity. Calculate mean values | temphum.py |
-| Post data to DataCake | http_requests.py |
-| Connect to a WIFI network | wifi.py |
-| Connect to a LoRa network | lora.py |
-| Credentials for WIFI and DataCake | datacake_keys.py, keys |
+| Functionality                                                            | File |
+|--------------------------------------------------------------------------| ----------- |
+| Main program, setup and endless loop                                     | main.py |
+| Read temperature and humidity. Pick 'best' values. Calculate mean values | temphum.py |
+| Post data to DataCake                                                    | http_requests.py |
+| Connect to a WIFI network                                                | wifi.py |
+| Connect to a LoRa network                                                | lora.py |
+| Credentials for WIFI and DataCake                                        | datacake_keys.py, keys |
 
-Source code for WIFI and LoRa has been copied from [^1]  [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
-I am truly thankful for this support! Part of the that source code is rewritten to suit my means.
+Source code for WiFi and LoRa has been copied from [^1]  [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
+I am truly thankful for the example code given! Part of the that source code is rewritten to suit my means.
 
 The project have the following file structure:
 
@@ -237,14 +240,14 @@ The project have the following file structure:
 └── main.py
 ````
 
-Support functions reside under the lib-folder. This i also a folder that the micropython interpreter will look at
-to find files for import. The main file resides under the project root.
+Support functions reside under the lib-folder. This is also a folder that the micropython interpreter will look at
+to find files to import. The main file resides under the project root.
 
 
 #### Reading temperature and humidity
 
 The core functionality for reading temperature and humidity is implemented in  a class **TempHum**. The
-implementation makes it possible create several objects but different logical pin names. Nota Bene: The DHT11 can be called no more than once per second.
+implementation makes it possible create several objects but different logical pin names as parameter to the constructor. **Nota Bene:** The DHT11 can be called no more than once per second.
 In case of reading error an exception will be raised. The caller needs to take care of the exception.
 
 ```python
@@ -275,10 +278,14 @@ sensor objects. Values outside a range will be discarded. This application uses
 3 DHT11 and select two of them, i.e. the ones closest in measurement and than
 build a mean value for temperature and humidity.
 
-```python
-def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
+**closest_pair** Calculates the pair closest and return that pair.
 
-    def closest_pair(values: list) -> tuple:
+**calculate_mean** Calculate mean.
+
+```python
+def get_mean_values(sensors: list[int]) -> tuple[float, float]:
+
+    def closest_pair(values: list[int]) -> tuple:
         # Calculate the absolute differences between each pair
         ab_diff = abs(values[0] - values[1])
         ac_diff = abs(values[0] - values[2])
@@ -318,8 +325,8 @@ def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
 
 #### Post values
 
-Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. bad reply from DataCake
-other errors.
+Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. when executing urequests.post
+or status code from DataCake other than HTTP_STATUS_OK.
 
 ```python
 def post_values(temp: int, hum: int) -> None:
@@ -338,8 +345,8 @@ def post_values(temp: int, hum: int) -> None:
         raise DataCakeError(f"Error, failed to post data! {response.status_code}")
 ```
 
-I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). I the
-moment I don't know the root cause of this problem. It still works if I catch the neglect the error.
+I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). At the
+moment I don't know the root cause of this problem. It still works if I catch and the neglect the error.
 
 ```commandline
 Temperature: 25.5 C Humidity: 32.5 %
@@ -360,11 +367,11 @@ is alive.
 
 The program can be divided int two parts:
 
- - Setup phase, setting up WIFI, LoRA and sensors. 
+ - Setup phase, setting up WiFi, LoRA and sensors. 
 
- - Eternal loop phase where sensors are read and posted to DataCake or some similar systems. 
-   The intention is to have as little knowledge of the underlaying functionality, promote readability
-   and if needed dig deeper, like how Wifi is set up or sensors are read.
+ - Eternal loop phase where sensors are read and posted to DataCake or some similar systems. The intention
+   is that **main()** have less knowledge of details, this promotes readability and makes it easy to move
+   from a LoRa solution to a Wifi and vice versa.
    
 ```python
 def main():
@@ -423,11 +430,6 @@ The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https
 
 # Finalizing the design
 
-Show the final results of your project. Give your final thoughts on how you think the project went. What could 
-have been done in an other way, or even better? Pictures are nice!
-
-
-
 
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
 
@@ -440,30 +442,20 @@ solution.
 If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
 included in any of the starter kits that I bought. I should have spent more time on tools for visualsation too.
 
-
-
-
 # Transmitting the data / connectivity
 
 My primary goal was to have an application using LoRa, so that was my first attempt. I started to connect
-the LoRa module and and the provided example code from the common github repo provided from LNU. I tried
+the LoRa module and the provided example code from the common github repo provided from LNU. I tried
 a number of combination and altered the code bit by bit. I moved the application and equipment to
 the roof of our buildning. 
 
 The python code for LoRA sends a number of **AT-commands** to the module. At a point it starts to
-initiate a join() to the network and than use the **AT-command CSTATUS** 
+initiate a join() to the network and than use the **AT-command CSTATUS** -> Inquire Device Current Status. 
 
-Here starts the problem. In the end of the setup of the modem there is a status check checking the
-modem have connected to the network. Often I got halfway, saying: **There is data sent and success**, status code for this 
-is **03** but the status,check_join_status() se below,  expects **There is data sent and success, there is download too.**
-equal to status code **08** This did never happened. 
+Here starts the problem. Often I got halfway, saying: **There is data sent and success**, status code for this 
+is **03** but the status,check_join_status() se below, expects **There is data sent and success, there is download too.**
+equal to status code **08** This happened occasionally. 
 
-I enabled loggning the modem, and suddenly it started to work sporadically
-
-
- ![Tux, the Linux mascot](./images/cstatus.png)
-
- ![Tux, the Linux mascot](./images/lora_overview.png)
 
 ```python=
    def _check_join_status(self):
@@ -476,7 +468,37 @@ I enabled loggning the modem, and suddenly it started to work sporadically
         return False
 ```
 
-A stdout log looks like this when debuggning is enabled.  Note the credentials are fake values.
+I enabled loggning the modem, and suddenly it started to work little better, but not reliable.
+
+
+ ![Tux, the Linux mascot](./images/cstatus.png)
+
+A functional view of the module and the connected MCU, that is Pico W.
+
+ ![Tux, the Linux mascot](./images/lora_overview.png)
+
+```python
+
+   def setup_lora(self, dev_eui: str, app_eui: str, app_key: str):
+
+        self.configure(dev_eui, app_eui, app_key)
+
+        self.start_join()
+        print("Start Join LoRa.....")
+        timeout = time.time() + self.TIMEOUT
+        while not self._check_join_status():
+            print('.', end='')
+
+            if time.time() > timeout:
+                raise LoRaTimeout('Error failed to connect, timeout!')
+
+            time.sleep(1)
+        print("Join success!")
+        self.lora_enabled = True
+```
+
+A stdout log looks like this when debuggning is enabled.  The code do not pass the 'Joining ...' 
+Note the credentials are fake values.
 ```commandline
 >>> %Run -c $EDITOR_CONTENT
 
@@ -491,7 +513,7 @@ b'AT+CAPPEUI=F8C83B1925EEDD37\r\n'b'\r\n'b'OK\r\n'
 b'AT+CAPPKEY=42ED841CCD0A92561EA9ED33DF9CABBA\r\n'b'\r\n'b'OK\r\n'
 b'AT+CULDLMODE=2\r\n'b'\r\n'b'OK\r\n'
 b'AT+CCLASS=2\r\n'b'\r\n'b'OK\r\n'b'AT+CWORKMODE=2\r\n'b'\r\n'b'OK\r\n'b'AT+CDATARATE=5\r\n'b'\r\n'b'+CME ERROR:1\r\n'
-Start Join.....
+Start Join LoRa
 b'AT+CRXP=0,0,869525000\r\n'b'\r\n'b'OK\r\n'b'AT+CFREQBANDMASK=0001\r\n'b'\r\n'b'OK\r\n'b'AT+CJOIN=1,0,10,8\r\n'b'\r\n'b'OK\r\n'b'AT+CSTATUS?\r\n'b'\r\n'b'+CSTATUS:03\r\n'b'OK\r\n'
 Joining....
 b'AT+CSTATUS?\r\n'b'\r\n'b'+CSTATUS:03\r\n'b'OK\r\n'
@@ -510,7 +532,7 @@ MPY: soft reboot
 .
 ..
 ...
-Start Join.....
+Start Join LoRa
 b'AT+CRXP=0,0,869525000\r\n'b'\r\n'b'OK\r\n'b'AT+CFREQBANDMASK=0001\r\n'b'\r\n'b'OK\r\n'b'AT+CJOIN=1,0,10,8\r\n'b'\r\n'b'OK\r\n'b'AT+CSTATUS?\r\n'b'\r\n'b'+CSTATUS:03\r\n'b'OK\r\n'
 Join success!
 SENT AT+DTRX=1,1,8,ff7201a9
@@ -519,6 +541,7 @@ b'AT+DTRX=1,1,8,ff7201a9\r\n'b'\r\n'b'ERR+SEND:00\r\n'
 Sent message: ff7201a9
 ```
 
+**Conclusion:** I did abandon the LoRa solution since was not stable enough.
 
 [^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
