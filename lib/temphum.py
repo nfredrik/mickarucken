@@ -25,7 +25,7 @@ class TempHum:
         return temp, hum
 
 
-def get_mean_values(sensors: list[dht.DHT11]) -> tuple[float, float]:
+def get_mean_values(sensors: list[int]) -> tuple[float, float]:
 
     def closest_pair(values: list) -> tuple:
         # Calculate the absolute differences between each pair

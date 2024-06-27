@@ -72,9 +72,10 @@ Figure 2a shows the one mounted on a board including a resistor.
 Figure 2b shows the DHT11 without board.
 
 
-LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MHz frequency range. 
+LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MHz frequency range (Europe). 
 It supports the LoRaWAN protocol. The module utilizes a serial communication interface and 
-can be controlled using the AT command set. Fig 3.
+can be controlled using the AT command set. 
+Fig 3.
 
 <img src="./images/lora_modem.png" alt="drawing" width="200"/>
 
@@ -92,8 +93,8 @@ two have better support when comes to programming python, but since project is s
 #### Flash Micropython to Raspberry Pico W
 
 When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
-To be able to load an application code the Pico W needs firmware. This is easily achieved by downloading
-firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to dowloaded
+To be able to load application code the Pico W needs firmware. This is easily achieved by downloading
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to the dowloaded
 file to the  RP2 device. The firmware will be loaded  and when finished, rebooted by itself.
 
 #### Overview, Thonny
@@ -118,8 +119,6 @@ When chosen RP2040 device there a new window to select files to execute. In this
 select main.py and push **OK** button
 
 <img src="./images/run_target.png" alt="drawing" width="500"/>
-
-Next step is to commence execution by pushing the green button, marked in red.
 
 
 # Circuit diagram (can be hand drawn)
@@ -157,7 +156,7 @@ Fig 4.
 
 # Platform
 
-I chosen DataCake since it's easy and not to much work to get it going. With the measurement I 
+I have chosen DataCake since it's easy and not to much work to get it going. With the measurement I 
 have I think it's a good fit. Apart from setting up the acount on DataCake need to configure
 how the data that arrives should be decoded, see below and how it should be presented in   Dashboard.
 
@@ -178,11 +177,6 @@ function Decoder(request) {
     
     var serialNumber = payload.serial
 
-
-    /*
-    Sample return format:
-    If you wish to manually return a fixed structure, Datacake API devices require the following format:
-    */
     return [
         {
             device: serialNumber, 
