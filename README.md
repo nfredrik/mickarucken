@@ -20,10 +20,10 @@ close to Brommaplan in Stockholm Sweden.
 
 My plan was to use LoRa with either Helium or TTN as provider. It turns out that none of these providers
 have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
-in this area and if that don't work go for WIFI
+in this area and if that don't work go for WiFi
 
-The purpose with application was to monitor  temperature and humidity and see if the temperature
-changes over time and and there is temperatures at the level of Frost.This typically happens during
+The purpose with the application was to monitor  temperature and humidity and see if the temperature
+changes over time and and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
 
