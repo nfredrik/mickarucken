@@ -31,18 +31,19 @@ I hope that this give me knowledge about temperature and humidity conditions at 
 
 # List of Materials
 
-| Unit                                                       | price SEK including VAT |
-|------------------------------------------------------------|---------------------|
-| Solderless Breadboard 840 tie-points                       | 69                  |
-| USB cable A-male - microB-male                             | 39                  | 
-| Raspberry Pi Pico WH                                       | 109                 |
-| 2 Digital temperature and humidity sensor DHT11 with board | 2 * 49              |
-| 1 Digital temperature and humidity sensor DHT11 without board  | 49                  |
-| 4.7 kohm resistor                                          | 1                   |
-| M5Stack LoRa module ASR6501 868MHz including antenna       | 330                 |
-| Jumper wires 40-pin 30cm male/male                         | 49                  |
-| Lab cord Grove - 0.64mm sockets 4-pol 200mm                | 14.5                |
-| ∑                                                          | 758.5               |
+| Unit                                                          | price SEK including VAT |
+|---------------------------------------------------------------|-------------------------|
+| Solderless Breadboard 840 tie-points                          | 69                      |
+| USB cable A-male - microB-male                                | 39                      | 
+| Raspberry Pi Pico WH                                          | 109                     |
+| 2 Digital temperature and humidity sensor DHT11 with board    | 2 * 49                  |
+| 1 Digital temperature and humidity sensor DHT11 without board | 49                      |
+| 4.7 kohm resistor                                             | 1                       |
+| M5Stack LoRa module ASR6501 868MHz including antenna          | 330                     |
+| Jumper wires 40-pin 30cm male/male                            | 49                      |
+| Lab cord Grove - 0.64mm sockets 4-pol 200mm                   | 14.5                    |
+| GP Powerbank GL343, 3.7V 4000 mAh                              | 241                     |
+| ∑                                                             | 999.5                   |
 
 All equipment purchased from Electrokit.
 
@@ -91,13 +92,18 @@ Fig 4.
 
 Fig 4.
 
+GP Powerbank GL343, 4000 mAh
+
+<img src="./images/powerbank.jpg" alt="drawing" width="200"/>
+
+
 
 # Computer setup
 
 My host operation system is MacOs/Unix.
 
 I have tried different type of Integrated Development Environments, IDEs, like Pycharm, VScode and Thonny.
-Thonny worked best when it comes to detect, load files and commence execution on the target, i.e. Pico W, so I picked Thonny. The other
+Thonny worked best when it comes to detect, load files and commence execution on the target, i.e. Pico W, so I picked [Thonny](https://thonny.org/). The other
 two have better support when comes to programming python, but since project is small it works well with Thonny.
 
 #### Flash Micropython to Raspberry Pico W
@@ -153,6 +159,12 @@ Pins used:
 | LoRa modem TX | 1   |UART0 TX |
 | LoRa modem | 2  |UART0 RX  |
 
+USB connector:
+
+GP Powerbank GP343 4000 mAh.
+
+
+
 All devices are connected to the power supply provided by Pico W. This means that the Ground (pin38)
 and VCC (3V) will be connected to  columns minus (-) and plus (+) on the breadboard and all devices connects
 to these columns.
@@ -165,6 +177,17 @@ One of the DHT11 do not have a board, so there was a need of a external resistor
 Fig 4.
 
 This setup only to be used for development.
+
+# Power consumption
+
+ Devices | consumption, mA |
+|--------|-----------------|
+| Pico wRP2 | 45              | 
+| 3 DHT11 | 3 * 0.3         | 
+| LoRa module | 5               | 
+| ∑      | 51              |
+
+Powerbank 4000 mAh, gives 4000/51 -> 78 hours -> approximately 3 days.
 
 
 # Platform
