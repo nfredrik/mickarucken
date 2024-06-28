@@ -1,6 +1,6 @@
 <img src="./images/logo.png" alt="drawing" width="20"/> ***Fredrik Svärd - fs223sq*** 
 
-# Tutorial on how to build a IoT application for temperature and humidity sensor
+# Tutorial on how to build an IoT application for temperature and humidity sensors
 
 The project introduces a solution to read humidity and temperature using  DHT11 sensors, Raspberry Pi Pico W, and
 forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.
@@ -392,7 +392,7 @@ The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https
 
 # Transmitting the data / connectivity
 
-First, I had to abandon the LoRa solution since was to unreliable in this area.
+First, I had to abandon the LoRa solution since it is unreliable in this area.
 I gathered my findings under header **obstacles**
 
 The data to DataCake is sent over http. DataCake have an endpoint to
@@ -547,6 +547,8 @@ Charts for temperature and humidity presented in DataCake on a weekly basis.
 ![ff](./images/datacake_later.png)
 
 
+The complete application: 
+
  ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
 
 
@@ -563,17 +565,17 @@ A small video showing the installation, IDE and presentation in DataCake.
 
 [Video on setup](https://youtube.com/shorts/qDCdxx_hHoM)
 
-[^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
 
 
 # Future Work and Enhancements
 
 If the LoRa network expands an cover the garden community near Brommaplan it will be nice to implement a application using LoRa
-to report on conditions in the garden. Alternatively would be to implement LTE solution.
+to report on conditions in the garden. Alternatively would be to implement Low-Power Wide-Area Network (LPWAN) solution.
 
-https://hackmd.io/@lnu-iot/iot-tutorial#How-to-write-your-tutorial
+# References
 
+[^1]: [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w).
 
 
 
