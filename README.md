@@ -74,15 +74,22 @@ Figure 2a shows the one mounted on a board including a resistor.
 
 Figure 2b shows the DHT11 without board.
 
+4.7 kohm resistor, Fig 3
+
+<img src="./images/resistor.jpg" alt="drawing" width="100"/>
+
+Fig 3.
+
+
 
 LoRaWAN868/ASR6501 Unit is a LoRaWAN communication module designed for the 868MHz frequency range (Europe). 
 It supports the LoRaWAN protocol. The module utilizes a serial communication interface and 
 can be controlled using the AT command set. 
-Fig 3.
+Fig 4.
 
 <img src="./images/lora_modem.png" alt="drawing" width="200"/>
 
-Fig 3.
+Fig 4.
 
 
 # Computer setup
