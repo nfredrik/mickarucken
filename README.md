@@ -409,7 +409,7 @@ for posting data. This is done every 5:th minute. The format is json.
 
 Corresponding source code for this action: 
 
-Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. when executing urequests.post
+Post values from sensors to DataCake. An exception will be raised in case of failure, for example when executing urequests.post
 or status code from DataCake other than HTTP_STATUS_OK.
 
 ```python
@@ -561,7 +561,7 @@ The complete application:
 
 
 The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
-Stockholm. I should have spent more time on investigate more about coverage. I'm a bit disapointed since the
+Stockholm. I should have spent more time on investigating more about coverage. I'm a bit disappointed since the
 coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
 solution.  
 
