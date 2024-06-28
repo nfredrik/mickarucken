@@ -92,10 +92,11 @@ Fig 4.
 
 Fig 4.
 
-GP Powerbank GL343, 4000 mAh
+GP Powerbank GL343, 4000 mAh, Fig 5.
 
 <img src="./images/powerbank.jpg" alt="drawing" width="200"/>
 
+Fig 5.
 
 
 # Computer setup
