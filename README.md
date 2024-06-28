@@ -165,7 +165,7 @@ GP Powerbank GP343 4000 mAh.
 
 
 
-All devices are connected to the power supply provided by Pico W. This means that the Ground (pin38)
+All devices are connected to the power supply indirectly provided by Pico W. This means that the Ground (pin38)
 and VCC (3V) will be connected to  columns minus (-) and plus (+) on the breadboard and all devices connects
 to these columns.
 
