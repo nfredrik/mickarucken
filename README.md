@@ -549,8 +549,8 @@ Charts for temperature and humidity presented in DataCake on a weekly basis.
 
 The complete application: 
 
- ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
 
+![Tux, the Linux mascot](./images/ny_installation.jpg)
 
 
 The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
