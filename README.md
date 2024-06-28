@@ -177,6 +177,13 @@ One of the DHT11 do not have a board, so there was a need of a external resistor
 
 Fig 4.
 
+The LoRa module requires 3V as Vcc Figure 5. 
+
+![](./images/lora_schematic.png)
+
+
+Fig 5.
+
 This setup only to be used for development.
 
 # Power consumption
@@ -575,7 +582,7 @@ Sent message: ff7201a9
 Charts for temperature and humidity presented in DataCake on a weekly basis.
 
 
-![ff](./images/datacake_later.png)
+![](./images/datacake_latest.png)
 
 
 The complete application: 
