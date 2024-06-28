@@ -1,6 +1,6 @@
 <img src="./images/logo.png" alt="drawing" width="20"/> ***Fredrik Svärd - fs223sq*** 
 
-# Overview
+# Tutorial on how to build a IoT application for temperature and humidity sensor
 
 The project introduces a solution to read humidity and temperature using  DHT11 sensors, Raspberry Pi Pico W, and
 forward the data with the help of Wi-Fi and/or LoRa, and later visualize the information using DataCake.
@@ -26,6 +26,8 @@ The purpose with the application was to monitor  temperature and humidity and se
 changes over time and and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
+
+I hope that this give me knowledge about temperature and humidity conditions at the garden community and IoT technology.
 
 # List of Materials
 
@@ -98,7 +100,7 @@ To be able to load application code the Pico W needs firmware. This is easily ac
 firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to the dowloaded
 file to the  RP2 device. The firmware will be loaded and when finished, rebooted by itself.
 
-#### Overview, Thonny
+#### Chosen IDE, Thonny
 
 First view of the Thony IDE. Marked in a blue rectangle, the root folder of the project
 and the source code. Marked in red rectangle the files on the target, i.e. the Pico W. Marked in green rectangle
@@ -155,6 +157,8 @@ One of the DHT11 do not have a board, so there was a need of a external resistor
 
 Fig 4.
 
+This setup only to be used for development.
+
 
 # Platform
 
@@ -194,12 +198,6 @@ function Decoder(request) {
     
 }
 ```
-
-
-Charts for temperature and humidity presented in DataCake on a weekly basis.
-
-
-![ff](./images/datacake_later.png)
 
 # The code
 
@@ -319,41 +317,6 @@ def get_mean_values(sensors: list[int]) -> tuple[float, float]:
 ```
 
 
-#### Post values
-
-Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. when executing urequests.post
-or status code from DataCake other than HTTP_STATUS_OK.
-
-```python
-def post_values(temp: int, hum: int) -> None:
-    payload = {
-        "serial": DATACAKE_SERIAL,
-        "temperature": temp,
-        "humidity": hum}
-    json_payload = json.dumps(payload)
-
-    try:
-        response = urequests.post(DATACAKE_URL, data=json_payload)
-    except OSError as err:
-        raise DataCakeError(f"Error, failed to post DataCake: {err}")
-
-    if response.status_code != HTTP_STATUS_OK:
-        raise DataCakeError(f"Error, failed to post data! {response.status_code}")
-```
-
-I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). At the
-moment I don't know the root cause of this problem. It still works if the **main()**-function catches and the neglect the error.
-
-```commandline
-Temperature: 25.5 C Humidity: 32.5 %
-Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
-Temperature: 25.5 C Humidity: 32.5 %
-
-ENOMEM is known error code. A thorough explanation can be found here: [error codes] (https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
-```
 
 ### main 
 
@@ -427,22 +390,53 @@ if __name__ == "__main__":
 The rest of the source code is provided in this repo. Please check setup of Wifi and LoRa.
 The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https://github.com/iot-lnu/pico-w). many thanks!
 
-# Finalizing the design
-
-
- ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
-
-
-
-The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
-Stockholm. I should have spent more time on investigate more about coverage. I'm a bit disapointed since the
-coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
-solution.  
-
-If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
-included in any of the starter kits that I bought. I should have spent more time on tools for visualsation too.
-
 # Transmitting the data / connectivity
+
+First, I had to abandon the LoRa solution since was to unreliable in this area.
+I gathered my findings under header **obstacles**
+
+The data to DataCake is sent over http. DataCake have an endpoint to
+for posting data. This is done every 5:th minute. The format is json.
+
+![data](./images/datacake_msg.png)
+
+Corresponding source code for this action: 
+
+Post values from sensors to DataCake. An exception will be raised in case of failure, e.g. when executing urequests.post
+or status code from DataCake other than HTTP_STATUS_OK.
+
+```python
+def post_values(temp: int, hum: int) -> None:
+    payload = {
+        "serial": DATACAKE_SERIAL,
+        "temperature": temp,
+        "humidity": hum}
+    json_payload = json.dumps(payload)
+
+    try:
+        response = urequests.post(DATACAKE_URL, data=json_payload)
+    except OSError as err:
+        raise DataCakeError(f"Error, failed to post DataCake: {err}")
+
+    if response.status_code != HTTP_STATUS_OK:
+        raise DataCakeError(f"Error, failed to post data! {response.status_code}")
+```
+
+I have observed that sometimes there is a problem with posting due to memory problem (ENOMEM). At the
+moment I don't know the root cause of this problem. It still works if the **main()**-function catches and the neglect the error.
+
+```commandline
+Temperature: 25.5 C Humidity: 32.5 %
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
+Temperature: 25.5 C Humidity: 32.5 %
+
+ENOMEM is known error code. A thorough explanation can be found here: [error codes] (https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
+```
+
+### Obstacles
 
 My primary goal was to have an application using LoRa, so that was my first attempt. I started to connect
 the LoRa module and the provided example code from the common github repo provided from LNU. I tried
@@ -543,7 +537,29 @@ b'AT+DTRX=1,1,8,ff7201a9\r\n'b'\r\n'b'ERR+SEND:00\r\n'
 Sent message: ff7201a9
 ```
 
-**Conclusion:** I did abandon the LoRa solution since was not stable enough and WiFi solution worked well.
+
+# Finalizing the design
+
+
+Charts for temperature and humidity presented in DataCake on a weekly basis.
+
+
+![ff](./images/datacake_later.png)
+
+
+ ![Tux, the Linux mascot](./images/bild_pa_allt.jpeg)
+
+
+
+The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
+Stockholm. I should have spent more time on investigate more about coverage. I'm a bit disapointed since the
+coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
+solution.  
+
+If I had more time, I should put more effort find sensors reading Air Quality, CO2 etc but that was not
+included in any of the starter kits that I bought. I should have spent more time on tools for visualsation too.
+
+A small video showing the installation, IDE and presentation in DataCake.
 
 [Video on setup](https://youtube.com/shorts/qDCdxx_hHoM)
 

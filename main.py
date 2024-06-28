@@ -8,7 +8,7 @@ from machine import Timer
 from temphum import TempHum, get_mean_values, TempHumError
 from wifi import Wifi, WifiTimeout, MonitorWifi
 
-SLEEP_INTERVAL = 10
+SLEEP_INTERVAL = 300
 
 
 class ConnectionDroppedError(Exception):
