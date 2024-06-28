@@ -48,7 +48,7 @@ All equipment purchased from Electrokit.
 
 
 In this project I have chosen to work with the Pico RP2 w device as seen in Fig. 1.
-It's  device can be programmed with MicroPython and has several bands of connectivity. 
+This device can be programmed with MicroPython and has several bands of connectivity. 
 The device has many digital and analog input and outputs and is well suited for an IoT project.
 
 <img src="images/pico_w.jpeg" alt="drawing" width="300"/>
