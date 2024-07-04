@@ -581,7 +581,8 @@ Sent message: ff7201a9
 The complete application: 
 
 
-![Tux, the Linux mascot](./images/ny_installation.jpg)
+
+![Tux, the Linux mascot](./images/powerbank_ny.jpg)
 
 
 The project went well except from that there was no coverage for Helium or TTN at the  allotment garden in Brommaplan
