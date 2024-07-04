@@ -11,22 +11,22 @@ Kalmar Sweden.
 All information, images, and code shared in this report are under  [MIT license](https://mit-license.org/).
 
 This project can be completed in a few hours as long as you have all 
-the prerequisite hardware and software setup.
+the specified hardware and software setup.
 
 # Objective
 
 I have chosen to build an application that could report humidity and temperature from an allotment garden 
 close to Brommaplan in Stockholm Sweden.
 
-My plan was to use LoRa with either Helium or TTN (networks of IoT) as provider. It turns out that none of these providers
-have coverage in this area.
+My plan was to use LoRa with either Helium or TTN (networks of IoT) as provider. 
 
 The purpose with the application was to monitor  temperature and humidity and see if the temperature
 changes over time and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
 
-I hope that this give me knowledge about temperature and humidity conditions at an allotment garden and IoT technology.
+I hope that this give me knowledge about temperature and humidity conditions at my allotment garden and at the 
+same time gain som knowledge of IoT technology.
 
 # List of Materials
 
@@ -115,7 +115,7 @@ file to the  RP2 device. The firmware will be loaded and when finished, rebooted
 
 #### Chosen IDE, Thonny
 
-First view of the Thony IDE. Marked in a blue rectangle, the root folder of the project
+First view of the Thonny IDE. Marked in a blue rectangle, the root folder of the project
 and the source code. Marked in red rectangle the files on the target, i.e. the Pico W. Marked in green rectangle
 shows that the IDE have contact with the target. As seen it shows up as a device file. (everything is
 a file in unix :-)). Marked in black rectangle, a feature that makes it possible to upload folder/files from your computer 
@@ -199,7 +199,7 @@ Powerbank 4000 mAh, gives 4000/51 -> 78 hours -> approximately 3 days.
 
 # Platform
 
-I have chosen a cloud solution i.e. DataCake since it's easy and not to much work to get it going. With the measurement I think 
+I have chosen a cloud solution i.e. DataCake since it's easy and not to much work to get it going. With the picked measurements I think 
 it's a good fit. Apart from setting up the acount on DataCake we need to configure
 how the data that arrives should be decoded, see below and how it should be presented in a Dashboard.
 
@@ -406,7 +406,7 @@ First, I had to abandon the LoRa solution since it is unreliable in this area.
 I gathered my findings under header **obstacles**. The fallback was a WiFi solution.
 
 The data to DataCake is sent over http. DataCake have an endpoint to
-for posting data. This is done every 5:th minute. The format is json.
+for posting data. This is done **every 5:th minute**. The format is json.
 
 Post values from sensors to DataCake. An exception will be raised in case of failure, for example when executing urequests.post
 or status code from DataCake other than HTTP_STATUS_OK.
@@ -446,7 +446,7 @@ ENOMEM is known error code. A thorough explanation can be found here: [error cod
 
 I followed the guideline how to Datacake for a device. [Setup Data Cake](https://hackmd.io/@lnu-iot/HyU0e37Pn).
 
-When the IoT starts posting to Datacake the raw data show up like this:
+When the IoT device starts posting to Datacake the raw data show up like this:
 
 
 <img src="./images/datacake_msg.png" alt="drawing" width="500"/>
@@ -458,7 +458,7 @@ The raw data needs to be decoded by Datacake. The decoder in Datacake looks like
 <img src="./images/datacake_decoder.png" alt="drawing" width="800"/>
 
 
-DataCake know how to interpret incoming data. It's now possible configure a Dashboard and render 
+Now DataCake know how to interpret incoming data. It's now possible configure a Dashboard and render 
 some charts.
 
 
@@ -496,7 +496,7 @@ equal to status code **08** This happened occasionally.
         restr = self._get_response()
         if "+CSTATUS:" in restr and "08" in restr:
             return True
-f
+
         return False
 ```
 
