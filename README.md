@@ -439,12 +439,13 @@ Temperature: 25.5 C Humidity: 32.5 %
 Error, failed to postError, failed to post DataCake:[Errno 12] ENOMEM
 Temperature: 25.5 C Humidity: 32.5 %
 
-ENOMEM is known error code. A thorough explanation can be found here: [error codes] (https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
 ```
+ENOMEM is known error code. A thorough explanation can be found here: [error codes](https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
+
 
 ## Presenting the data
 
-I followed the guideline how to Datacake for a device. [Setup Data Cake](https://hackmd.io/@lnu-iot/HyU0e37Pn).
+I followed the guideline how to set up Datacake for a device. [Setup Data Cake](https://hackmd.io/@lnu-iot/HyU0e37Pn).
 
 When the IoT device starts posting to Datacake the raw data show up like this:
 
@@ -462,7 +463,7 @@ Now DataCake know how to interpret incoming data. It's now possible configure a 
 some charts.
 
 
-I picked 2 line charts and 2 circle gauges showing momentary values. 
+I picked 2 line charts and 2 circle gauges showing current values. 
 
 
 
