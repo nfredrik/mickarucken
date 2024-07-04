@@ -209,33 +209,6 @@ At configuration of DataCake, a serial number will be generated
  that the application program in target should use so DataCake
 will be able to identify the source of the data .
 
-
-Decoder code in DataLake, written i javscript.
-
-```python=
-function Decoder(request) {
-  
-    // First, parse the request body into a JSON object to process it
-    var payload = JSON.parse(request.body)
-    
-    var serialNumber = payload.serial
-
-    return [
-        {
-            device: serialNumber, 
-            field: "TEMPERATURE",
-            value: payload.temperature
-        },
-        {
-            device: serialNumber,
-            field: "HUMIDITY",
-            value: payload.humidity
-        }
-    ];
-    
-}
-```
-
 # The code
 
 
@@ -430,14 +403,10 @@ The code for Wifi and LoRa as been copied from [github.com/iot-lnu/pico-w](https
 # Transmitting the data / connectivity
 
 First, I had to abandon the LoRa solution since it is unreliable in this area.
-I gathered my findings under header **obstacles**
+I gathered my findings under header **obstacles**. The fallback was a WiFi solution.
 
 The data to DataCake is sent over http. DataCake have an endpoint to
 for posting data. This is done every 5:th minute. The format is json.
-
-![data](./images/datacake_msg.png)
-
-Corresponding source code for this action: 
 
 Post values from sensors to DataCake. An exception will be raised in case of failure, for example when executing urequests.post
 or status code from DataCake other than HTTP_STATUS_OK.
@@ -473,7 +442,39 @@ Temperature: 25.5 C Humidity: 32.5 %
 ENOMEM is known error code. A thorough explanation can be found here: [error codes] (https://www.kernel.org/doc/html/v4.11/media/uapi/gen-errors.html)
 ```
 
-### Obstacles
+## Presenting the data
+
+I followed the guideline how to Datacake for a device. [Setup Data Cake](https://hackmd.io/@lnu-iot/HyU0e37Pn).
+
+When the IoT starts posting to Datacake the raw data show up like this:
+
+
+<img src="./images/datacake_msg.png" alt="drawing" width="500"/>
+
+
+The raw data needs to be decoded by Datacake. The decoder in Datacake looks like this:
+
+
+<img src="./images/datacake_decoder.png" alt="drawing" width="800"/>
+
+
+DataCake know how to interpret incoming data. It's now possible configure a Dashboard and render 
+some charts.
+
+
+I picked 2 line charts and 2 circle gauges showing momentary values. 
+
+
+
+Charts for temperature and humidity presented in DataCake on a weekly basis.
+
+
+![](./images/datacake_latest.png)
+
+
+
+
+## Obstacles
 
 My primary goal was to have an application using LoRa, so that was my first attempt. I started to connect
 the LoRa module and the provided example code from the common github repo provided from LNU. I tried
@@ -576,13 +577,6 @@ Sent message: ff7201a9
 
 
 # Finalizing the design
-
-
-Charts for temperature and humidity presented in DataCake on a weekly basis.
-
-
-![](./images/datacake_latest.png)
-
 
 The complete application: 
 
