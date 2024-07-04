@@ -15,19 +15,18 @@ the prerequisite hardware and software setup.
 
 # Objective
 
-I have chosen to build an application that could report humidity and temperature from garden community 
+I have chosen to build an application that could report humidity and temperature from an allotment garden 
 close to Brommaplan in Stockholm Sweden.
 
 My plan was to use LoRa with either Helium or TTN (networks of IoT) as provider. It turns out that none of these providers
-have coverage in this area. My plan changed to either use LoRa from my apartment since Helium have coverage
-in this area and if that don't work go for WiFi.
+have coverage in this area.
 
 The purpose with the application was to monitor  temperature and humidity and see if the temperature
-changes over time and and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
+changes over time and there is temperatures at the level of [Frost](https://en.wikipedia.org/wiki/Frost).This typically happens during
 the night when the air temperature drops and moisture in the air condenses and 
 freezes on surfaces like grass, car windows, and roofs.
 
-I hope that this give me knowledge about temperature and humidity conditions at the garden community and IoT technology.
+I hope that this give me knowledge about temperature and humidity conditions at an allotment garden and IoT technology.
 
 # List of Materials
 
@@ -109,9 +108,9 @@ two have better support when comes to programming python, but since project is s
 
 #### Flash Micropython to Raspberry Pico W
 
-When connecting the Pico the first time it shows up as a USB device if the push-button (BOOTSEL) is actived during boot.
-To be able to load application code the Pico W needs firmware. This is easily achieved by downloading
-firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and than drag and drop to the dowloaded
+First, push the BOOTSEL button on the pico w and **then** connect the USB cable.  The Pico shows up as a USB device on your computer.
+To be able to load application code the Pico needs firmware. This is easily achieved by downloading
+firmware from this site [micropython pico w](https://micropython.org/download/RPI_PICO_W/ ) and then drag and drop to the dowloaded
 file to the  RP2 device. The firmware will be loaded and when finished, rebooted by itself.
 
 #### Chosen IDE, Thonny
@@ -200,7 +199,7 @@ Powerbank 4000 mAh, gives 4000/51 -> 78 hours -> approximately 3 days.
 
 # Platform
 
-I have chosen DataCake since it's easy and not to much work to get it going. With the measurement I think 
+I have chosen a cloud solution i.e. DataCake since it's easy and not to much work to get it going. With the measurement I think 
 it's a good fit. Apart from setting up the acount on DataCake we need to configure
 how the data that arrives should be decoded, see below and how it should be presented in a Dashboard.
 
@@ -591,7 +590,7 @@ The complete application:
 ![Tux, the Linux mascot](./images/ny_installation.jpg)
 
 
-The project went well except from that there was no coverage for Helium or TTN at the garden community in Brommaplan
+The project went well except from that there was no coverage for Helium or TTN at the  allotment garden in Brommaplan
 Stockholm. I should have spent more time on investigating more about coverage. I'm a bit disappointed since the
 coverage should be okay where I live it seems that connectivty, LoRa, was quite flaky so I did go for the backup
 solution.  
@@ -608,7 +607,7 @@ A small video showing the installation, IDE and presentation in DataCake.
 
 # Future Work and Enhancements
 
-If the LoRa network expands an cover the garden community near Brommaplan it will be nice to implement a application using LoRa
+If the LoRa network expands an cover the allotment garden near Brommaplan it will be nice to implement a application using LoRa
 to report on conditions in the garden. Alternatively would be to implement Low-Power Wide-Area Network (LPWAN) solution.
 
 # References
